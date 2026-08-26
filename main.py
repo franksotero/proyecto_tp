@@ -1,6 +1,7 @@
 usuarios = ["admin"]
 contrasenas = ["1234"]
 
+
 def registrar_usuario():
     print("\n--- REGISTRO DE NUEVO USUARIO ---")
     nuevo_usuario = input("Ingresa un nuevo usuario: ")
@@ -11,7 +12,7 @@ def registrar_usuario():
         usuarios.append(nuevo_usuario)
         contrasenas.append(nueva_contrasena)
         print("¡Usuario registrado con éxito!")
-    menu ()
+
 
 def iniciar_sesion():
     print("\n--- INICIO DE SESIÓN ---")
@@ -20,14 +21,13 @@ def iniciar_sesion():
     if usuario_ingresado in usuarios:
         posicion = usuarios.index(usuario_ingresado)
         if contrasenas[posicion] == contrasena_ingresada:
-            print("¡Bienvenido, ", usuario_ingresado, "!")
-            menu_principal ()
+            print(f"¡Bienvenido, {usuario_ingresado}!")
+            menu_principal()
         else:
             print("Contraseña incorrecta.")
-            menu ()
     else:
         print("El usuario no existe.")
-        menu ()
+
 
 productos = [
     [1, "Pan lactal", "alimentos", 1200.0, 50, 0.0],
@@ -39,17 +39,18 @@ productos = [
     [7, "Jamon Cocido", "fiambrería", 1500.0, 40, 0.05],
     [8, "Papas fritas", "snacks", 2800.0, 25, 0.10],
     [9, "Jabon", "higiene", 650.0, 60, 0.0],
-    [10, "Queso Cremoso", "lácteos", 4200.0, 18, 0.15]
+    [10, "Queso Cremoso", "lácteos", 4200.0, 18, 0.15],
 ]
 
-#CREATE PRODUCTO
+
+# CREATE PRODUCTO
 def crear_producto():
     print("\n--- AGREGAR PRODUCTO ---")
     if len(productos) > 0:
         ultimo_id = max(fila[0] for fila in productos)
         nuevo_id = ultimo_id + 1
     else:
-        nuevo_id = 1 
+        nuevo_id = 1
 
     nombre = input("Nombre: ")
     categoria = input("Categoría: ")
@@ -61,42 +62,50 @@ def crear_producto():
     productos.append(nueva_fila)
     print(f"\n¡Producto agregado con éxito! Se le asignó el ID: {nuevo_id}")
 
-#READ PRODUCTOS
+
+# READ PRODUCTOS
 def listar_productos():
     print("\n--- LISTA DE PRODUCTOS ---")
     if len(productos) == 0:
         print("No hay productos en la lista.")
     else:
-        print(f"{'ID':<4} | {'NOMBRE':<15} | {'CATEGORÍA':<12} | {'PRECIO':<10} | {'STOCK':<6} | {'DESC (%)':<8}")
-        print("-" * 70)  
+        print(
+            f"{'ID':<4} | {'NOMBRE':<15} | {'CATEGORÍA':<12} | {'PRECIO':<10} | {'STOCK':<6} | {'DESC (%)':<8}"
+        )
+        print("-" * 70)
         for fila in productos:
             desc_porcentaje = fila[5] * 100
-            print(f"{fila[0]:<4} | {fila[1]:<15} | {fila[2]:<12} | ${fila[3]:<9.2f} | {fila[4]:<6} | {desc_porcentaje:<8.1f}%")
+            print(
+                f"{fila[0]:<4} | {fila[1]:<15} | {fila[2]:<12} | ${fila[3]:<9.2f} | {fila[4]:<6} | {desc_porcentaje:<8.1f}%"
+            )
         print("-" * 70)
 
-#UPDATE PRODUCTO
+
+# UPDATE PRODUCTO
 def actualizar_stock():
     listar_productos()
     id_buscar = int(input("\nIngresa el ID del producto para cambiar su stock: "))
     encontrado = False
     for fila in productos:
         if fila[0] == id_buscar:
-            nuevo_stock = int(input(f"El stock actual de {fila[1]} es {fila[4]}. Nuevo stock: "))
+            nuevo_stock = int(
+                input(f"El stock actual de {fila[1]} es {fila[4]}. Nuevo stock: ")
+            )
             fila[4] = nuevo_stock
             print("¡Stock actualizado!")
-            encontrado = True            
+            encontrado = True
     if not encontrado:
         print("Producto no encontrado.")
         menu_productos()
 
 
-#DELETE PRODUCTO
+# DELETE PRODUCTO
 def eliminar_producto():
     listar_productos()
     id_buscar = int(input("\nIngresa el ID del producto a eliminar: "))
     encontrado = False
     for i in range(len(productos)):
-        if productos[i][0] == id_buscar: 
+        if productos[i][0] == id_buscar:
             productos.pop(i)
             print("¡Producto eliminado!")
             encontrado = True
@@ -117,7 +126,7 @@ def menu_productos():
         print("3. Actualizar stock")
         print("4. Eliminar producto")
         print("5. Salir al menú principal")
-        
+
         opcion = input("Elige una opción (1-5): ")
 
         if opcion == "1":
@@ -138,10 +147,11 @@ def menu_productos():
             print("\nOpción no válida. Intenta de nuevo.")
             input("\nPresiona Enter para continuar...")
 
+
 def menu():
     opcion = ""
     while opcion != "3":
-        print("\n=== Bienvenido al sistema del supermercado ===")
+        print("\n=== BIENVENIDO AL SISTEMA DEL SUPERMERCADO ===")
         print("1. Iniciar sesión")
         print("2. Registrar nuevo usuario")
         print("3. Salir")
@@ -155,12 +165,13 @@ def menu():
         else:
             print("Opción no válida. Intenta de nuevo.")
 
+
 def menu_principal():
     opcion = ""
     while opcion != "4":
-        print("\n=================================")
+        print("\n======================================")
         print("  SISTEMA DE GESTIÓN DEL SUPERMERCADO  ")
-        print("=================================")
+        print("======================================")
         print("1. Módulo de Productos")
         print("2. Módulo de Clientes")
         print("3. Módulo de Ventas")
@@ -176,5 +187,6 @@ def menu_principal():
             print("\n¡Gracias por usar el sistema!")
         else:
             print("Opción no válida.")
-    
+
+
 menu()
