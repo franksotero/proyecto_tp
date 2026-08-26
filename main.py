@@ -5,10 +5,10 @@ contrasenas = ["1234"]
 def registrar_usuario():
     print("\n--- REGISTRO DE NUEVO USUARIO ---")
     nuevo_usuario = input("Ingresa un nuevo usuario: ")
+    nueva_contrasena = input("Ingresa una contraseña: ")
     if nuevo_usuario in usuarios:
         print("El usuario ingresado ya existe.")
     else:
-        nueva_contrasena = input("Ingresa una contraseña: ")
         usuarios.append(nuevo_usuario)
         contrasenas.append(nueva_contrasena)
         print("¡Usuario registrado con éxito!")
@@ -164,6 +164,10 @@ def menu():
             print("\n¡Hasta luego!")
         else:
             print("Opción no válida. Intenta de nuevo.")
+
+
+def menu_clientes():
+
 
 
 def menu_principal():
