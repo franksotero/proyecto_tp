@@ -18,9 +18,16 @@ def leer_cliente():
 leer_cliente()
 
 def crear_cliente():
-    nombre = input("Ingrese su nombre y apellido: ").strip() # strip quita espacios al inicio y al final del texto
-    while(len(nombre.split()) < 2):
-        nombre = input("Ingrese su nombre y apellido: ").strip()
+    nombre = input("Ingrese su nombre y apellido: ")
+    while(len(nombre) < 4):
+        nombre = input("Ingrese su nombre y apellido: ")
+    tipo_cliente = input("Ingrese el tipo de cliente: ")
+    while(tipo_cliente != "frecuente" and tipo_cliente != "mayorista"):
+        tipo_cliente = input("ERROR. Ingrese el tipo de cliente: ")
+    telefono = input("Ingrese el número de teléfono: ")
+    while(len(telefono) < 10):
+        telefono = input("ERROR. Ingrese el número de teléfono: ")
+
 
     print(nombre)
 crear_cliente()
