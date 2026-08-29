@@ -1,5 +1,5 @@
 from productos import menu_productos, productos
-from clientes import leer_cliente, crear_cliente
+from clientes import menu_clientes, clientes
 from usuarios import iniciar_sesion, registrar_usuario
 
 def menu_inicio():
