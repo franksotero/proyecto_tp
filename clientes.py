@@ -15,7 +15,7 @@ def leer_cliente():
     for cliente in clientes:
         print(f"{cliente[0]:<3} | {cliente[1]:<18} | {cliente[2]:<10} | {cliente[3]:<11}")
 
-leer_cliente()
+# leer_cliente()
 
 def crear_cliente():
     nombre = input("Ingrese su nombre y apellido: ")
@@ -30,4 +30,4 @@ def crear_cliente():
 
 
     print(nombre)
-crear_cliente()
+# crear_cliente()
