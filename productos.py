@@ -3,12 +3,12 @@ productos = [
     [2, "Detergente", "limpieza", 2500.0, 30, 0.10],
     [3, "Gaseosa Cola 2L", "bebidas", 1800.0, 45, 0.05],
     [4, "Chocolate ", "golosinas", 950.0, 100, 0.0],
-    [5, "Shampoo", "Higiene", 3000.0, 20, 0.15],
-    [6, "Medialunas", "panadería", 3500.0, 15, 0.0],
-    [7, "Jamon Cocido", "fiambrería", 1500.0, 40, 0.05],
-    [8, "Papas fritas", "snacks", 2800.0, 25, 0.10],
-    [9, "Jabon", "higiene", 650.0, 60, 0.0],
-    [10, "Queso Cremoso", "lácteos", 4200.0, 18, 0.15],
+    [5, "Shampoo", "Higiene", 3000.0, 7, 0.15],
+    [6, "Arroz", "panadería", 3500.0, 8, 0.0],
+    [7, "Galletitas ", "fiambrería", 1500.0, 5, 0.05],
+    [8, "Papas fritas ", "snacks", 2800.0, 25, 0.10],
+    [9, "Jabon ", "higiene", 650.0, 60, 0.0],
+    [10, "Aceite ", "lácteos", 4200.0, 18, 0.15],
 ]
 
 
@@ -52,20 +52,23 @@ def listar_productos():
 
 # UPDATE PRODUCTO
 def actualizar_stock():
-    listar_productos()
-    id_buscar = int(input("\nIngresa el ID del producto para cambiar su stock: "))
-    encontrado = False
-    for fila in productos:
-        if fila[0] == id_buscar:
-            nuevo_stock = int(
-                input(f"El stock actual de {fila[1]} es {fila[4]}. Nuevo stock: ")
-            )
-            fila[4] = nuevo_stock
-            print("¡Stock actualizado!")
-            encontrado = True
-    if not encontrado:
-        print("Producto no encontrado.")
-        menu_productos()
+    print("1. Para ver productos con bajo stock")
+    print("2. Para actualizar stock")
+    opcion = input("Elige una opción (1-2): ")
+    if opcion == "1":
+        mostrar_productos_poco_stock()
+    elif opcion == "2":
+        listar_productos()
+        id_buscar = int(input("\nIngresa el ID del producto para cambiar su stock: "))
+        encontrado = False
+        for fila in productos:
+            if fila[0] == id_buscar:
+                nuevo_stock = int(input(f"El stock actual de {fila[1]} es {fila[4]}. Nuevo stock: "))
+                fila[4] = nuevo_stock
+                print("¡Stock actualizado!")
+                encontrado = True
+        if encontrado == False:
+            print("Producto no encontrado.")
 
 
 # DELETE PRODUCTO
@@ -82,6 +85,14 @@ def eliminar_producto():
     if not encontrado:
         print("Producto no encontrado.")
 
+def mostrar_productos_poco_stock():
+    print("\n--- PRODUCTOS CON POCO STOCK (Menos de 10) ---")
+    productos_criticos = list(filter(lambda x: x[4] < 10, productos))
+    if len(productos_criticos) == 0:
+        print("Todos los productos tienen stock suficiente.")
+    else:
+        for p in productos_criticos:
+            print(f"ID: {p[0]} | Producto: {p[1]} | Stock actual: {p[4]}")
 
 # MENÚ PRODUCTOS ---
 def menu_productos():

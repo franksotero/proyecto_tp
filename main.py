@@ -1,6 +1,6 @@
 from productos import menu_productos, productos
 from clientes import menu_clientes, clientes
-from usuarios import iniciar_sesion, registrar_usuario
+from usuarios import iniciar_sesion, registrar_usuario, generar_usuario
 
 def menu_inicio():
     opcion = ""
