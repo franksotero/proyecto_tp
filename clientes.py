@@ -28,10 +28,10 @@ def menu_clientes():
         elif opcion == "2":
             crear_cliente()
         elif opcion == "3":
-            actualizar_cliente()
-        elif opcion == "4":
-            eliminar_cliente()
-        elif opcion == "5":
+            #actualizar_cliente()
+        #elif opcion == "4":
+            #eliminar_cliente()
+        #elif opcion == "5":
             print("Volviendo al menú principal...")
         else:
             print("Opción no válida. Intente nuevamente.")
