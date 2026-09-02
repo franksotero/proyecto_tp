@@ -25,7 +25,7 @@ def registrar_usuario():
 
 def iniciar_sesion():
     print("\n--- INICIO DE SESIÓN ---")
-    usuario_ingresado = input("Usuario: ")
+    usuario_ingresado = input("Usuario: ").lower()
     contrasena_ingresada = input("Contraseña: ")
 
     if usuario_ingresado in usuarios:
