@@ -1,4 +1,4 @@
-from productos import productos
+from productos import productos, listar_productos
 from clientes import clientes, listar_clientes
 
 ventas = []
@@ -42,6 +42,8 @@ def registrar_venta():
     if cliente == None:
         print("Cliente no encontrado.")
         return
+
+    listar_productos()
     prod_id = int(input("Ingrese ID del producto: "))
     producto = None
     for p in productos:
