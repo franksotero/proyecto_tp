@@ -1,11 +1,14 @@
 usuarios = ["admin"]
 contrasenas = ["1234"]
 
+
 def generar_usuario():
     nombre = input("Ingrese nombre: ")
     apellido = input("Ingrese apellido: ")
     usuario = (nombre[:2] + apellido).lower()
+
     return usuario
+
 
 def registrar_usuario():
     print("\n--- REGISTRO DE NUEVO USUARIO ---")
@@ -24,6 +27,7 @@ def iniciar_sesion():
     print("\n--- INICIO DE SESIÓN ---")
     usuario_ingresado = input("Usuario: ")
     contrasena_ingresada = input("Contraseña: ")
+
     if usuario_ingresado in usuarios:
         posicion = usuarios.index(usuario_ingresado)
         if contrasenas[posicion] == contrasena_ingresada:
@@ -35,4 +39,3 @@ def iniciar_sesion():
     else:
         print("El usuario no existe.")
         return False
-

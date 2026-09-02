@@ -1,7 +1,8 @@
-from productos import menu_productos, productos
-from clientes import menu_clientes, clientes
-from usuarios import iniciar_sesion, registrar_usuario, generar_usuario
-from ventas import registrar_venta , menu_ventas
+from clientes import menu_clientes
+from productos import menu_productos
+from usuarios import iniciar_sesion, registrar_usuario
+from ventas import menu_ventas
+
 
 def menu_inicio():
     opcion = ""
@@ -20,6 +21,7 @@ def menu_inicio():
             print("\n¡Hasta luego!")
         else:
             print("Opción no válida. Intenta de nuevo.")
+
 
 def menu_principal():
     opcion = ""

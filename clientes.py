@@ -7,6 +7,7 @@ clientes = [
     [4, "Sofia Ruiz", "mayorista", "1166778899"],
 ]
 
+
 def menu_clientes():
     opcion = ""
     while opcion != "5":
@@ -19,38 +20,53 @@ def menu_clientes():
         print("4. Eliminar cliente ")
         print("5. Volver al menú principal")
         print("=================================")
-        
+
         opcion = input("Seleccione una opción (1-5): ")
 
         if opcion == "1":
-            leer_cliente()
+            listar_clientes()
         elif opcion == "2":
             crear_cliente()
-        #elif opcion == "3":
-            # actualizar_cliente()  
-        #elif opcion == "4":
-            # eliminar_cliente()  
+        elif opcion == "3":
+            actualizar_cliente()
+        elif opcion == "4":
+            eliminar_cliente()
         elif opcion == "5":
             print("Volviendo al menú principal...")
         else:
             print("Opción no válida. Intente nuevamente.")
 
 
-def crear_cliente():
-    nombre = input("Ingrese su nombre y apellido: ")
-    while(len(nombre) < 4):
-        nombre = input("Ingrese su nombre y apellido: ")
-    tipo_cliente = input("Ingrese el tipo de cliente: ")
-    while(tipo_cliente != "frecuente" and tipo_cliente != "mayorista"):
-        tipo_cliente = input("ERROR. Ingrese el tipo de cliente: ")
-    telefono = input("Ingrese el número de teléfono: ")
-    while(len(telefono) < 10):
-        telefono = input("ERROR. Ingrese el número de teléfono: ")
-    print(nombre)
-
-def leer_cliente():
-    print("---- LISTA DE CLIENTES ----")
+# CRUD CLIENTES
+def listar_clientes():
+    print("\n---- LISTA DE CLIENTES ----")
     print(f"{'ID':<3} | {'NOMBRE Y APELLIDO':<18} | {'TIPO':<10} | {'TELÉFONO':<11}")
     print("-" * 55)
     for cliente in clientes:
-        print(f"{cliente[0]:<3} | {cliente[1]:<18} | {cliente[2]:<10} | {cliente[3]:<11}")
+        print(
+            f"{cliente[0]:<3} | {cliente[1]:<18} | {cliente[2]:<10} | {cliente[3]:<11}"
+        )
+
+
+def crear_cliente():
+    print("---- CREAR NUEVO CLIENTE ----")
+    id = len(clientes)
+
+    nombre = input("Ingrese su nombre y apellido: ").title()
+    while len(nombre) < 5:
+        print("ERROR. El nombre y apellido deben tener al menos 2 caracteres.")
+        nombre = input("Ingrese su nombre y apellido: ").title()
+
+    tipo_cliente = input("Ingrese el tipo de cliente: ").lower()
+    while tipo_cliente != "frecuente" and tipo_cliente != "mayorista":
+        print("ERROR. Solo existen dos tipos de clientes: frecuente o mayorista.")
+        tipo_cliente = input("Ingrese el tipo de cliente: ").lower()
+
+    telefono = input("Ingrese el número de teléfono: ")
+    while len(telefono) < 10:
+        print("ERROR. El teléfono debe tener 10 números.")
+        telefono = input("Ingrese el número de teléfono: ")
+
+    nuevo_cliente = [id, nombre, tipo_cliente, telefono]
+    clientes.append(nuevo_cliente)
+    print("¡Cliente creado con éxito!")
