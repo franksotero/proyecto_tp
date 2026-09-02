@@ -3,7 +3,7 @@ clientes = [
     [0, "Ana Gomez", "frecuente", "1122334455"],
     [1, "Luis Perez", "mayorista", "1199887766"],
     [2, "Anastasia Diaz", "frecuente", "1144556677"],
-    [3, "Martin Lopez", "ocasional", "1133221100"],
+    [3, "Martin Lopez", "frecuente", "1133221100"],
     [4, "Sofia Ruiz", "mayorista", "1166778899"],
 ]
 
@@ -48,8 +48,8 @@ def listar_clientes():
         )
 
 
-def mostrar_cliente(cliente):
-    print("\n---- ESTAS MODIFICANDO AL CLIENTE ----")
+def mostrar_cliente(titulo, cliente):
+    print(f"\n---- {titulo} ----")
     print(f"{'ID':<3} | {'NOMBRE Y APELLIDO':<18} | {'TIPO':<10} | {'TELÉFONO':<11}")
     print("-" * 55)
 
@@ -108,7 +108,7 @@ def actualizar_cliente():
             encontrado = True
             opcion = 0
             while opcion != 4:
-                mostrar_cliente(cliente)
+                mostrar_cliente("ESTAS ACTUALIZANDO A", cliente)
                 print("\n1. Actualizar nombre y apellido")
                 print("2. Actualizar tipo de cliente")
                 print("3. Actualizar número de teléfono")
@@ -138,4 +138,26 @@ def actualizar_cliente():
 
 
 def eliminar_cliente():
-    print("---- ELIMINAR UN CLIENTE ----")
+    print("\n---- ELIMINAR UN CLIENTE ----")
+    listar_clientes()
+
+    id_buscar = int(input("\nIngresa el ID del cliente que quieres eliminar: "))
+
+    encontrado = False
+
+    for cliente in clientes:
+        if cliente[0] == id_buscar:
+            encontrado = True
+            mostrar_cliente("ESTAS POR ELIMINAR A", cliente)
+
+            opcion = input("¿Estas seguro? (si/no): ").lower()
+            if opcion == "si":
+                clientes.remove(cliente)
+                print("¡Cliente eliminado con éxito!")
+                break
+            else:
+                print("Operación cancelada.")
+                break
+
+    if encontrado != True:
+        print("El ID no existe.")
