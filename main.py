@@ -3,7 +3,6 @@ from productos import menu_productos
 from usuarios import iniciar_sesion, registrar_usuario
 from ventas import menu_ventas
 
-
 def menu_inicio():
     opcion = ""
     while opcion != "3":
@@ -13,8 +12,9 @@ def menu_inicio():
         print("3. Salir")
         opcion = input("Elige una opción (1, 2 o 3): ")
         if opcion == "1":
-            if iniciar_sesion():
-                menu_principal()
+            rol = iniciar_sesion()
+            if rol:
+                menu_principal(rol)
         elif opcion == "2":
             registrar_usuario()
         elif opcion == "3":
@@ -22,28 +22,26 @@ def menu_inicio():
         else:
             print("Opción no válida. Intenta de nuevo.")
 
-
-def menu_principal():
+def menu_principal(rol):
     opcion = ""
     while opcion != "4":
-        print("\n======================================")
-        print("  SISTEMA DE GESTIÓN DEL SUPERMERCADO  ")
-        print("======================================")
+        print(f"\n======================================")
+        print(f"  SISTEMA DE GESTIÓN DEL SUPERMERCADO ({rol.upper()})  ")
+        print(f"======================================")
         print("1. Módulo de Productos")
         print("2. Módulo de Clientes")
         print("3. Módulo de Ventas")
-        print("4. Salir")
+        print("4. Cerrar Sesión")
         opcion = input("Seleccione una opción: ")
         if opcion == "1":
-            menu_productos()
+            menu_productos(rol)
         elif opcion == "2":
-            menu_clientes()
+            menu_clientes(rol)
         elif opcion == "3":
-            menu_ventas()
+            menu_ventas(rol)
         elif opcion == "4":
             print("\n¡Gracias por usar el sistema!")
         else:
             print("Opción no válida.")
-
 
 menu_inicio()

@@ -8,11 +8,11 @@ clientes = [
 ]
 
 
-def menu_clientes():
+def menu_clientes(rol):
     opcion = ""
     while opcion != "5":
         print("\n=================================")
-        print("       GESTIÓN DE CLIENTES       ")
+        print(f"       GESTIÓN DE CLIENTES ({rol.upper()})       ")
         print("=================================")
         print("1. Listar clientes")
         print("2. Registrar nuevo cliente ")
@@ -30,7 +30,10 @@ def menu_clientes():
         elif opcion == "3":
             actualizar_cliente()
         elif opcion == "4":
-            eliminar_cliente()
+            if rol == "admin":
+                eliminar_cliente()
+            else:
+                print("\n[ACCESO DENEGADO] Solo los administradores pueden eliminar clientes.")
         elif opcion == "5":
             print("Volviendo al menú principal...")
         else:

@@ -132,7 +132,7 @@ def menu_reportes():
             print("\nOpción no válida. Intenta de nuevo.")
 
 # MENÚ PRODUCTOS
-def menu_productos():
+def menu_productos(rol):
     opcion = ""
     while opcion != "6":
         print("\n==================================")
@@ -146,9 +146,11 @@ def menu_productos():
         print("6. Salir al menú principal")
 
         opcion = input("Elige una opción (1-6): ")
-
         if opcion == "1":
-            crear_producto()
+            if rol == "admin":
+                crear_producto()
+            else:
+                print("\n[ACCESO DENEGADO] Solo los administradores pueden agregar un producto.")
             input("\nPresiona Enter para continuar...")
         elif opcion == "2":
             listar_productos(productos) 
@@ -157,7 +159,10 @@ def menu_productos():
             actualizar_stock()
             input("\nPresiona Enter para continuar...")
         elif opcion == "4":
-            eliminar_producto()
+            if rol == "admin":
+                eliminar_producto()
+            else:
+                print("\n[ACCESO DENEGADO] Solo los administradores pueden eliminar un producto.")
             input("\nPresiona Enter para continuar...")
         elif opcion == "5":
             menu_reportes() 

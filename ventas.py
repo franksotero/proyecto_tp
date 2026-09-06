@@ -4,11 +4,11 @@ from clientes import clientes, listar_clientes
 ventas = []
 
 
-def menu_ventas():
+def menu_ventas(rol):
     opcion = ""
     while opcion != "5":
         print("\n=================================")
-        print("        GESTIÓN DE VENTAS         ")
+        print(f"        GESTIÓN DE VENTAS ({rol.upper()})         ")
         print("=================================")
         print("1. Registrar ventas ")
         print("2. Consultar ventas")
@@ -21,9 +21,15 @@ def menu_ventas():
         elif opcion == "2":
             consultar_ventas()
         elif opcion == "3":
-            reporte_ventas()
+            if rol == "admin":
+                reporte_ventas()
+            else:
+                print("\n[ACCESO DENEGADO] Solo los administradores pueden ver el reporte de ventas.")
         elif opcion == "4":
-            cancelar_venta()
+            if rol == "admin":
+                cancelar_venta()
+            else:
+                print("\n[ACCESO DENEGADO] Solo los administradores pueden cancelar ventas.")
         elif opcion == "5":
             print("Regresando al menu principal...L")
         else:
@@ -43,7 +49,7 @@ def registrar_venta():
         print("Cliente no encontrado.")
         return
 
-    listar_productos()
+    listar_productos(productos)
     prod_id = int(input("Ingrese ID del producto: "))
     producto = None
     for p in productos:
