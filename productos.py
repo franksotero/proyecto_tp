@@ -123,7 +123,6 @@ def menu_reportes():
             ordenar_categoria_prod()
             input("\nPresiona Enter para continuar...")
         elif opcion == "2":
-            # Podés crear también esta función si la querés implementar
             ordenar_precio_prod() 
             input("\nPresiona Enter para continuar...")
         elif opcion == "3":
