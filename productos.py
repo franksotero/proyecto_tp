@@ -14,7 +14,7 @@ productos = [
 
 # CREATE PRODUCTO
 def crear_producto():
-    print("\n--- AGREGAR PRODUCTO ---")
+    print("\n\033[4;35m--- AGREGAR PRODUCTO ---\033[0m")
     if len(productos) > 0:
         ultimo_id = max(fila[0] for fila in productos)
         nuevo_id = ultimo_id + 1
@@ -25,17 +25,17 @@ def crear_producto():
     categoria = input("Categoría: ")
     precio = float(input("Precio: "))
     while precio <= 0:
-        precio = float(input("Error, el precio no puede ser nulo o negativo, ingrese el precio: "))
+        precio = float(input("\033[37;41mError, el precio no puede ser nulo o negativo, ingrese el precio: \033[0m"))
     stock = int(input("Stock inicial: "))
     while stock <= 0:
-        stock = int(input("Error, el stock no puede ser nulo o negativo, ingrese el stock: "))
+        stock = int(input("\033[37;41mError, el stock no puede ser nulo o negativo, ingrese el stock: \033[0m"))
     descuento = float(input("Descuento : "))
     while descuento < 0:
-        descuento = float(input("Error, el descuento no puede ser negativo, ingrese el descuento: "))
+        descuento = float(input("\033[37;41mError, el descuento no puede ser negativo, ingrese el descuento: \033[0m"))
 
     nueva_fila = [nuevo_id, nombre, categoria, precio, stock, descuento]
     productos.append(nueva_fila)
-    print(f"\n¡Producto agregado con éxito! Se le asignó el ID: {nuevo_id}")
+    print(f"\n\033[32m¡Producto agregado con éxito! Se le asignó el ID: {nuevo_id}\033[0m")
 
 # READ PRODUCTOS
 def listar_productos(lista):
@@ -68,10 +68,10 @@ def actualizar_stock():
             if fila[0] == id_buscar:
                 nuevo_stock = int(input(f"El stock actual de {fila[1]} es {fila[4]}. Nuevo stock: "))
                 fila[4] = nuevo_stock
-                print("¡Stock actualizado!")
+                print("\033[32m¡Stock actualizado!\033[0m")
                 encontrado = True
         if encontrado == False:
-            print("Producto no encontrado.")
+            print("\033[31mProducto no encontrado.\033[0m")
 
 # DELETE PRODUCTO
 def eliminar_producto():
@@ -81,17 +81,17 @@ def eliminar_producto():
     for i in range(len(productos)):
         if productos[i][0] == id_buscar:
             productos.pop(i)
-            print("¡Producto eliminado!")
+            print("\033[32m¡Producto eliminado!\033[0m")
             encontrado = True
             menu_productos()
     if not encontrado:
-        print("Producto no encontrado.")
+        print("\033[31mProducto no encontrado.\033[31m")
 
 def mostrar_productos_poco_stock():
-    print("\n--- PRODUCTOS CON POCO STOCK (Menos de 10) ---")
+    print("\n\033[4;35m--- PRODUCTOS CON POCO STOCK (Menos de 10) ---\033[0m")
     productos_criticos = list(filter(lambda x: x[4] < 10, productos))
     if len(productos_criticos) == 0:
-        print("Todos los productos tienen stock suficiente.")
+        print("\033[32mTodos los productos tienen stock suficiente.\033[0m")
     else:
         for p in productos_criticos:
             print(f"ID: {p[0]} | Producto: {p[1]} | Stock actual: {p[4]}")
@@ -99,7 +99,7 @@ def mostrar_productos_poco_stock():
 #ORDENAR
 def ordenar_categoria_prod():
     prod_ordenados = sorted(productos, key=lambda p: p[2].lower())
-    print("\n--- PRODUCTOS ORDENADOS POR CATEGORÍA ---")
+    print("\n\033[4;35m--- PRODUCTOS ORDENADOS POR CATEGORÍA ---\033[0m")
     listar_productos(prod_ordenados)
 
 def ordenar_precio_prod():
@@ -111,7 +111,7 @@ def menu_reportes():
     opcion = ""
     while opcion != "3":
         print("\n==================================")
-        print("      REPORTES Y ORDENAMIENTO     ")
+        print("\033[1;34m      REPORTES Y ORDENAMIENTO     \033[0m")
         print("==================================")
         print("1. Ordenar por categoría")
         print("2. Ordenar por precio (menor a mayor)")
@@ -129,14 +129,14 @@ def menu_reportes():
         elif opcion == "3":
             print("\nRegresando...")
         else:
-            print("\nOpción no válida. Intenta de nuevo.")
+            print("\n\033[31mOpción no válida. Intenta de nuevo.\033[31m")
 
 # MENÚ PRODUCTOS
 def menu_productos(rol):
     opcion = ""
     while opcion != "6":
         print("\n==================================")
-        print("       GESTIÓN DE PRODUCTOS       ")
+        print("\033[1;34m       GESTIÓN DE PRODUCTOS       \033[0m")
         print("==================================")
         print("1. Agregar producto")
         print("2. Ver productos")
@@ -150,7 +150,7 @@ def menu_productos(rol):
             if rol == "admin":
                 crear_producto()
             else:
-                print("\n[ACCESO DENEGADO] Solo los administradores pueden agregar un producto.")
+                print("\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden agregar un producto.\033[m")
             input("\nPresiona Enter para continuar...")
         elif opcion == "2":
             listar_productos(productos) 
@@ -162,11 +162,11 @@ def menu_productos(rol):
             if rol == "admin":
                 eliminar_producto()
             else:
-                print("\n[ACCESO DENEGADO] Solo los administradores pueden eliminar un producto.")
+                print("\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden eliminar un producto.\033[0m")
             input("\nPresiona Enter para continuar...")
         elif opcion == "5":
             menu_reportes() 
         elif opcion == "6":
             print("\nRegresando al menú principal...")
         else:
-            print("\nOpción no válida. Intenta de nuevo.")
+            print("\n\033[31mOpción no válida. Intenta de nuevo.\033[/m")

@@ -11,9 +11,10 @@ clientes = [
 def menu_clientes(rol):
     opcion = ""
     while opcion != "5":
-        print("\n=================================")
-        print(f"       GESTIÓN DE CLIENTES ({rol.upper()})       ")
         print("=================================")
+        print("\033[1;34m      GESTIÓN DE CLIENTES       \033[0m")
+        print("=================================")
+
         print("1. Listar clientes")
         print("2. Registrar nuevo cliente ")
         print("3. Modificar datos de cliente ")
@@ -37,12 +38,12 @@ def menu_clientes(rol):
         elif opcion == "5":
             print("Volviendo al menú principal...")
         else:
-            print("Opción no válida. Intente nuevamente.")
+            print("\033[31mOpción no válida. Intente nuevamente.\033[0m")
 
 
 # CRUD CLIENTES
 def listar_clientes():
-    print("\n---- LISTA DE CLIENTES ----")
+    print("\n\033[32m---- LISTA DE CLIENTES ----\033[0m")
     print(f"{'ID':<3} | {'NOMBRE Y APELLIDO':<18} | {'TIPO':<10} | {'TELÉFONO':<11}")
     print("-" * 55)
     for cliente in clientes:
@@ -80,14 +81,14 @@ def validar_tipo_cliente():
 def validar_telefono():
     telefono = input("Ingrese el número de teléfono: ")
     while len(telefono) < 10:
-        print("ERROR. El teléfono debe tener 10 números.")
+        print("\033[31mERROR. El teléfono debe tener 10 números.\033[0m")
         telefono = input("Ingrese el número de teléfono: ")
 
     return telefono
 
 
 def crear_cliente():
-    print("\n---- CREAR NUEVO CLIENTE ----")
+    print("\n\033[1;33;44m---- CREAR NUEVO CLIENTE ----\033[0m")
     id = len(clientes)
     nombre = validar_nombre()
     tipo_cliente = validar_tipo_cliente()
@@ -95,11 +96,11 @@ def crear_cliente():
 
     nuevo_cliente = [id, nombre, tipo_cliente, telefono]
     clientes.append(nuevo_cliente)
-    print("¡Cliente creado con éxito!")
+    print("\033[32m¡Cliente creado con éxito!\033[0m")
 
 
 def actualizar_cliente():
-    print("\n---- ACTUALIZAR DATOS DE UN CLIENTE ----")
+    print("\n\033[1;33;44m---- ACTUALIZAR DATOS DE UN CLIENTE ----\033[0m")
     listar_clientes()
 
     id_buscar = int(input("\nIngresa el ID del cliente que quieres modificar: "))
@@ -121,27 +122,27 @@ def actualizar_cliente():
                 if opcion == 1:
                     nuevo_nombre = validar_nombre()
                     cliente[1] = nuevo_nombre
-                    print("Nombre y apellido actualizado correctamente.")
+                    print("\033[32mNombre y apellido actualizado correctamente.\033[0m")
                 elif opcion == 2:
                     nuevo_tipo_cliente = validar_tipo_cliente()
                     cliente[2] = nuevo_tipo_cliente
-                    print("Tipo de cliente actualizado correctamente.")
+                    print("\033[32mTipo de cliente actualizado correctamente.\033[0m")
                 elif opcion == 3:
                     nuevo_telefono = validar_telefono()
                     cliente[3] = nuevo_telefono
-                    print("Número de teléfono actualizado correctamente.")
+                    print("\033[32mNúmero de teléfono actualizado correctamente.\033[0m")
                 elif opcion == 4:
                     print("Volviendo al gestión de clientes...")
                 else:
-                    print("Error. Opción invalida. Intenta de nuevo.")
+                    print("\033[31mError. Opción invalida. Intenta de nuevo.\033[0m")
             break
 
     if encontrado != True:
-        print("El ID no existe.")
+        print("\033[31mEl ID no existe.\033[0m")
 
 
 def eliminar_cliente():
-    print("\n---- ELIMINAR UN CLIENTE ----")
+    print("\n\033[1;33;44m---- ELIMINAR UN CLIENTE ----\033[0m")
     listar_clientes()
 
     id_buscar = int(input("\nIngresa el ID del cliente que quieres eliminar: "))
@@ -156,11 +157,11 @@ def eliminar_cliente():
             opcion = input("¿Estas seguro? (si/no): ").lower()
             if opcion == "si":
                 clientes.remove(cliente)
-                print("¡Cliente eliminado con éxito!")
+                print("\033[32m¡Cliente eliminado con éxito!\033[0m")
                 break
             else:
-                print("Operación cancelada.")
+                print("\033[31mOperación cancelada.\033[0m")
                 break
 
     if encontrado != True:
-        print("El ID no existe.")
+        print("\033[31mEl ID no existe.\033[0m")

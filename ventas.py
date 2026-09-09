@@ -8,7 +8,7 @@ def menu_ventas(rol):
     opcion = ""
     while opcion != "5":
         print("\n=================================")
-        print(f"        GESTIÓN DE VENTAS ({rol.upper()})         ")
+        print(f"\033[1;34m        GESTIÓN DE VENTAS ({rol.upper()})         \033[0m")
         print("=================================")
         print("1. Registrar ventas ")
         print("2. Consultar ventas")
@@ -24,16 +24,16 @@ def menu_ventas(rol):
             if rol == "admin":
                 reporte_ventas()
             else:
-                print("\n[ACCESO DENEGADO] Solo los administradores pueden ver el reporte de ventas.")
+                print("\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden ver el reporte de ventas.\033[0m")
         elif opcion == "4":
             if rol == "admin":
                 cancelar_venta()
             else:
-                print("\n[ACCESO DENEGADO] Solo los administradores pueden cancelar ventas.")
+                print("\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden cancelar ventas.\033[0m")
         elif opcion == "5":
-            print("Regresando al menu principal...L")
+            print("\033[1;34mRegresando al menu principal...\033[0m")
         else:
-            print("opcion invalida")
+            print("\033[31mopcion invalida\033[0m")
 
 
 def registrar_venta():
@@ -46,7 +46,7 @@ def registrar_venta():
         if c[0] == cliente_id:  # ID está en posición 0
             cliente = c
     if cliente == None:
-        print("Cliente no encontrado.")
+        print("\033[31mCliente no encontrado.\033[0m")
         return
 
     listar_productos(productos)
@@ -56,11 +56,11 @@ def registrar_venta():
         if p[0] == prod_id:
             producto = p
     if producto == None:
-        print("Producto no encontrado.")
+        print("\033[31mProducto no encontrado.\033[0m")
         return
     cantidad = int(input("Ingrese cantidad: "))
     if cantidad > producto[4]:
-        print("Stock insuficiente.")
+        print("\033[31mStock insuficiente.\033[0m")
         return
     producto[4] = producto[4] - cantidad  # actualizar stock
     precio = producto[3]
@@ -70,4 +70,4 @@ def registrar_venta():
 
     venta = [f"V{len(ventas) + 1}", cliente[1], producto[1], cantidad, total]
     ventas.append(venta)
-    print("Venta registrada. Cliente:", cliente[1], "- Total:", total)
+    print("\033[32mVenta registrada. Cliente:", cliente[1], "- Total:\033[0m", total)

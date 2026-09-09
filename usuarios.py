@@ -11,24 +11,24 @@ def generar_usuario():
     return usuario
 
 def registrar_usuario():
-    print("\n--- REGISTRO DE NUEVO USUARIO ---")
+    print("\n\033[4;35m--- REGISTRO DE NUEVO USUARIO ---\033[0m")
     nuevo_usuario = generar_usuario()
     print(f"Su nombre de usuario asignado es: {nuevo_usuario}")
     for u in usuarios:
         if u[0] == nuevo_usuario:
-            print("El usuario ingresado ya existe.")
+            print("\033[31mEl usuario ingresado ya existe.\033[0m")
             return
     nueva_contrasena = input("Ingresa una contraseña: ")
     usuarios.append([nuevo_usuario, nueva_contrasena, "empleado"])
-    print("¡Usuario registrado con éxito como Empleado!")
+    print("\033[32m¡Usuario registrado con éxito como Empleado!\033[0m")
 
 def iniciar_sesion():
-    print("\n--- INICIO DE SESIÓN ---")
+    print("\n\033[4;35m--- INICIO DE SESIÓN ---\033[0m")
     usuario_ingresado = input("Usuario: ").lower()
     contrasena_ingresada = input("Contraseña: ")
     for u in usuarios:
         if u[0] == usuario_ingresado and u[1] == contrasena_ingresada:
-            print(f"\n¡Bienvenido, {usuario_ingresado} ({u[2].upper()})!")
+            print(f"\n\033[32m¡Bienvenido, {usuario_ingresado} ({u[2].upper()})!\033[0m")
             return u[2]
-    print("Usuario o contraseña incorrectos.")
+    print("\033[31mUsuario o contraseña incorrectos.\033[0m")
     return None
