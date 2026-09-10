@@ -16,7 +16,7 @@ productos = [
 def crear_producto():
     print("\n\033[4;35m--- AGREGAR PRODUCTO ---\033[0m")
     if len(productos) > 0:
-        ultimo_id = max(fila[0] for fila in productos)
+        ultimo_id = max(map(lambda fila: fila[0], productos))
         nuevo_id = ultimo_id + 1
     else:
         nuevo_id = 1
