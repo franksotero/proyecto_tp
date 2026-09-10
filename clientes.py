@@ -25,14 +25,14 @@ def menu_clientes(rol):
         opcion = input("Seleccione una opción (1-5): ")
 
         if opcion == "1":
-            listar_clientes()
+            listar_clientes(rol)
         elif opcion == "2":
             crear_cliente()
         elif opcion == "3":
-            actualizar_cliente()
+            actualizar_cliente(rol)
         elif opcion == "4":
             if rol == "admin":
-                eliminar_cliente()
+                eliminar_cliente(rol)
             else:
                 print("\n[ACCESO DENEGADO] Solo los administradores pueden eliminar clientes.")
         elif opcion == "5":
@@ -42,14 +42,16 @@ def menu_clientes(rol):
 
 
 # CRUD CLIENTES
-def listar_clientes():
-    print("\n\033[32m---- LISTA DE CLIENTES ----\033[0m")
+def listar_clientes(rol):
+    print("\n---- LISTA DE CLIENTES ----")
     print(f"{'ID':<3} | {'NOMBRE Y APELLIDO':<18} | {'TIPO':<10} | {'TELÉFONO':<11}")
     print("-" * 55)
-    for cliente in clientes:
-        print(
-            f"{cliente[0]:<3} | {cliente[1]:<18} | {cliente[2]:<10} | {cliente[3]:<11}"
-        )
+    if rol == "admin":
+        clientes_a_mostrar = clientes
+    else:
+        clientes_a_mostrar = list(map(lambda c: [c[0], c[1], c[2], f"******{c[3][-4:]}"],clientes))
+    for cliente in clientes_a_mostrar:
+        print(f"{cliente[0]:<3} | {cliente[1]:<18} | {cliente[2]:<10} | {cliente[3]:<11}")
 
 
 def mostrar_cliente(titulo, cliente):
@@ -59,6 +61,8 @@ def mostrar_cliente(titulo, cliente):
 
     print(f"{cliente[0]:<3} | {cliente[1]:<18} | {cliente[2]:<10} | {cliente[3]:<11}")
 
+def mostrar_telefono_oculto(telefono):
+    return "*" * (len(telefono) - 4) + telefono[-4:]
 
 def validar_nombre():
     nombre = input("Ingrese su nombre y apellido: ").title()
@@ -68,13 +72,12 @@ def validar_nombre():
 
     return nombre
 
-
+tipos_permitidos = ("frecuente", "mayorista")
 def validar_tipo_cliente():
     tipo_cliente = input("Ingrese el tipo de cliente: ").lower()
-    while tipo_cliente != "frecuente" and tipo_cliente != "mayorista":
-        print("ERROR. Solo existen dos tipos de clientes: frecuente o mayorista.")
+    while tipo_cliente not in tipos_permitidos:
+        print(f"ERROR. Solo se permiten: {tipos_permitidos}")
         tipo_cliente = input("Ingrese el tipo de cliente: ").lower()
-
     return tipo_cliente
 
 
@@ -83,30 +86,29 @@ def validar_telefono():
     while len(telefono) < 10:
         print("\033[31mERROR. El teléfono debe tener 10 números.\033[0m")
         telefono = input("Ingrese el número de teléfono: ")
-
     return telefono
-
 
 def crear_cliente():
     print("\n\033[1;33;44m---- CREAR NUEVO CLIENTE ----\033[0m")
-    id = len(clientes)
+    if len(clientes) > 0:
+        ultimo_id = max(fila[0] for fila in clientes)
+        nuevo_id = ultimo_id + 1
+    else:
+        nuevo_id = 1
     nombre = validar_nombre()
     tipo_cliente = validar_tipo_cliente()
     telefono = validar_telefono()
 
-    nuevo_cliente = [id, nombre, tipo_cliente, telefono]
+    nuevo_cliente = [nuevo_id, nombre, tipo_cliente, telefono]
     clientes.append(nuevo_cliente)
     print("\033[32m¡Cliente creado con éxito!\033[0m")
 
 
-def actualizar_cliente():
+def actualizar_cliente(rol):
     print("\n\033[1;33;44m---- ACTUALIZAR DATOS DE UN CLIENTE ----\033[0m")
-    listar_clientes()
-
+    listar_clientes(rol)
     id_buscar = int(input("\nIngresa el ID del cliente que quieres modificar: "))
-
     encontrado = False
-
     for cliente in clientes:
         if cliente[0] == id_buscar:
             encontrado = True
@@ -128,40 +130,34 @@ def actualizar_cliente():
                     cliente[2] = nuevo_tipo_cliente
                     print("\033[32mTipo de cliente actualizado correctamente.\033[0m")
                 elif opcion == 3:
-                    nuevo_telefono = validar_telefono()
-                    cliente[3] = nuevo_telefono
-                    print("\033[32mNúmero de teléfono actualizado correctamente.\033[0m")
+                    if rol == "admin":
+                        nuevo_telefono = validar_telefono()
+                        cliente[3] = nuevo_telefono
+                        print("\033[32mNúmero de teléfono actualizado correctamente.\033[0m")
+                    else:
+                        print("\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden modificar el teléfono.\033[0m")
                 elif opcion == 4:
                     print("Volviendo al gestión de clientes...")
                 else:
                     print("\033[31mError. Opción invalida. Intenta de nuevo.\033[0m")
-            break
-
     if encontrado != True:
         print("\033[31mEl ID no existe.\033[0m")
 
 
-def eliminar_cliente():
+def eliminar_cliente(rol):
     print("\n\033[1;33;44m---- ELIMINAR UN CLIENTE ----\033[0m")
-    listar_clientes()
-
+    listar_clientes(rol)
     id_buscar = int(input("\nIngresa el ID del cliente que quieres eliminar: "))
-
     encontrado = False
-
     for cliente in clientes:
         if cliente[0] == id_buscar:
             encontrado = True
             mostrar_cliente("ESTAS POR ELIMINAR A", cliente)
-
             opcion = input("¿Estas seguro? (si/no): ").lower()
             if opcion == "si":
                 clientes.remove(cliente)
                 print("\033[32m¡Cliente eliminado con éxito!\033[0m")
-                break
             else:
                 print("\033[31mOperación cancelada.\033[0m")
-                break
-
     if encontrado != True:
         print("\033[31mEl ID no existe.\033[0m")

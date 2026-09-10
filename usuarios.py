@@ -1,6 +1,9 @@
 #nombre de usuario, contraseña, rol
 usuarios = [
-    ["admin", "1234", "admin"]
+    ["admin", "1234", "admin"],
+    ["ivan","5678","empleado"],
+    ["tomas","1122","empleado"],
+    ["daniel","1212","empleado"]
 ]
 
 

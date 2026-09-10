@@ -22,7 +22,7 @@ def crear_producto():
         nuevo_id = 1
 
     nombre = input("Nombre: ")
-    categoria = input("Categoría: ")
+    categoria = validar_categoria()
     precio = float(input("Precio: "))
     while precio <= 0:
         precio = float(input("\033[37;41mError, el precio no puede ser nulo o negativo, ingrese el precio: \033[0m"))
@@ -36,6 +36,20 @@ def crear_producto():
     nueva_fila = [nuevo_id, nombre, categoria, precio, stock, descuento]
     productos.append(nueva_fila)
     print(f"\n\033[32m¡Producto agregado con éxito! Se le asignó el ID: {nuevo_id}\033[0m")
+
+def obtener_categorias_unicas():
+    categorias = set(p[2].lower() for p in productos)
+    print("Categorías disponibles en el sistema:", list(categorias))
+    return categorias
+
+def validar_categoria():
+    categorias_existentes = set(p[2].lower().strip() for p in productos)
+    print("\nCategorías disponibles:", ", ".join(categorias_existentes))
+    categoria = input("Ingrese la categoría: ").lower().strip()
+    while categoria not in categorias_existentes:
+        print("\033[31mError. La categoría no existe. Ingrese una de las categorías listadas.\033[0m")
+        categoria = input("Ingrese una categoría válida: ").lower().strip()
+    return categoria
 
 # READ PRODUCTOS
 def listar_productos(lista):
@@ -115,7 +129,8 @@ def menu_reportes():
         print("==================================")
         print("1. Ordenar por categoría")
         print("2. Ordenar por precio (menor a mayor)")
-        print("3. Volver al menú de productos")
+        print("3. Ver categorías únicas")
+        print("4. Volver al menú de productos")
 
         opcion = input("Elige una opción (1-3): ")
 
@@ -126,6 +141,9 @@ def menu_reportes():
             ordenar_precio_prod() 
             input("\nPresiona Enter para continuar...")
         elif opcion == "3":
+            obtener_categorias_unicas()
+            input("\nPresiona Enter para continuar...")
+        elif opcion == "4":
             print("\nRegresando...")
         else:
             print("\n\033[31mOpción no válida. Intenta de nuevo.\033[31m")
