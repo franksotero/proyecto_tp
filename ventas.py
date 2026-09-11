@@ -59,6 +59,13 @@ def buscar_producto_por_id(producto_id):
     return None
 
 
+def buscar_venta_por_id(venta_id):
+    for venta in ventas:
+        if venta["id"] == venta_id:
+            return venta
+    return None
+
+
 # CREAR
 def registrar_ventas(rol):
     print("---- REGISTRAR VENTA ----")
@@ -131,7 +138,7 @@ def registrar_ventas(rol):
             return
 
         diccionario_venta = {
-            "id": len(ventas) + 1,
+            "id": max((venta["id"] for venta in ventas), default=0) + 1,
             "cliente_id": cliente[0],
             "cliente_nombre": cliente[1],
             "items": una_venta,
@@ -181,9 +188,124 @@ def listar_ventas():
 
 # ACTUALIZAR
 def actualizar_ventas():
-    print("actualizar ventas")
+    print("---- ACTUALIZAR VENTAS ----")
+
+    print("\n\033[1;33;44m---- LISTA DE VENTAS ----\033[0m")
+    print(f"{'ID VENTA':<8} | {'NOMBRE Y APELLIDO':<17} | {'ITEMS':<5} | {'TOTAL':<10}")
+    print("-" * 70)
+    for venta in ventas:
+        print(
+            f"{venta['id']:<8} | {venta['cliente_nombre']:<17} | {len(venta['items']):<5} | ${venta['total']:<10}"
+        )
+
+    venta_id = int(input("\nIngrese el ID de la venta a actualizar: "))
+    venta = buscar_venta_por_id(venta_id)
+
+    if venta is None:
+        print("\033[31mID de venta no encontrado.\033[0m")
+        return
+
+    print(
+        f"{'ID PRODUCTO':<12} | {'NOMBRE Y APELLIDO':<22} | {'CANTIDAD':<8} | {'PRECIO FINAL':<12}"
+    )
+    print("-" * 120)
+    for item in venta["items"]:
+        print(
+            f"{item['producto_id']:<12} | {item['nombre']:<22} | {item['cantidad']:<8} | ${item['precio_final']:<12}"
+        )
+        print("-" * 120)
+        print(f"Total de la venta: ${venta['total']}")
+
+    producto_id = int(input("\nIngrese el ID del producto a actualizar: "))
+    item = next(
+        (item for item in venta["items"] if item["producto_id"] == producto_id),
+        None,
+    )
+
+    if item is None:
+        print("\033[31mID de producto no encontrado.\033[0m")
+        return
+
+    producto = buscar_producto_por_id(producto_id)
+    cantidad_anterior = item["cantidad"]
+    producto[4] += cantidad_anterior
+
+    nueva_cantidad = int(
+        input(
+            f"Ingrese la nueva cantidad de {producto[1]} "
+            f"(0 para eliminar el producto, stock disponible: {producto[4]}): "
+        )
+    )
+    while nueva_cantidad < 0 or nueva_cantidad > producto[4]:
+        print(
+            "\033[31mCantidad inválida. Debe ser 0 o mayor y no superar el stock disponible.\033[0m"
+        )
+        nueva_cantidad = int(
+            input(
+                f"Ingrese la nueva cantidad de {producto[1]} "
+                f"(0 para eliminar el producto, stock disponible: {producto[4]}): "
+            )
+        )
+
+    if nueva_cantidad == 0:
+        venta["items"].remove(item)
+        venta["total"] = sum(item["precio_final"] for item in venta["items"])
+
+        if len(venta["items"]) == 0:
+            ventas.remove(venta)
+            print("\033[32mVenta eliminada porque quedó sin productos.\033[0m")
+        else:
+            print("\033[32mProducto eliminado de la venta.\033[0m")
+            print(f"Nuevo total de la venta: ${venta['total']}")
+        return
+
+    producto[4] -= nueva_cantidad
+    subtotal = producto[3] * nueva_cantidad
+    precio_final = subtotal - (subtotal * producto[5])
+
+    item["cantidad"] = nueva_cantidad
+    item["subtotal"] = subtotal
+    item["precio_final"] = precio_final
+    venta["total"] = sum(item["precio_final"] for item in venta["items"])
+
+    print("\033[32mVenta actualizada correctamente.\033[0m")
+    print(f"Nuevo total de la venta: ${venta['total']}")
 
 
 # ELIMINAR
 def eliminar_ventas():
-    print("eliminar ventas")
+    print("---- ELIMINAR VENTA ----")
+
+    if len(ventas) == 0:
+        print("\033[31mNo hay ventas registradas.\033[0m")
+        return
+
+    print(f"{'ID VENTA':<8} | {'NOMBRE Y APELLIDO':<17} | {'ITEMS':<5} | {'TOTAL':<10}")
+    print("-" * 70)
+    for venta in ventas:
+        print(
+            f"{venta['id']:<8} | {venta['cliente_nombre']:<17} | "
+            f"{len(venta['items']):<5} | ${venta['total']:<10}"
+        )
+
+    venta_id = int(input("\nIngrese el ID de la venta a eliminar (0 para salir): "))
+    if venta_id == 0:
+        return
+
+    venta = buscar_venta_por_id(venta_id)
+    if venta is None:
+        print("\033[31mID de venta no encontrado.\033[0m")
+        return
+
+    confirmacion = input(f"¿Confirma eliminar la venta {venta_id}? (si/no): ").lower()
+    if confirmacion != "si":
+        print("Operación cancelada.")
+        return
+
+    for item in venta["items"]:
+        producto = buscar_producto_por_id(item["producto_id"])
+        if producto is not None:
+            producto[4] += item["cantidad"]
+
+    ventas.remove(venta)
+    print("\033[32mVenta eliminada y stock restaurado correctamente.\033[0m")
