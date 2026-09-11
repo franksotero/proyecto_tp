@@ -1,10 +1,10 @@
 # CLIENTES [id, nombre, tipo_cliente, telefono]
 clientes = [
-    [0, "Ana Gomez", "frecuente", "1122334455"],
-    [1, "Luis Perez", "mayorista", "1199887766"],
-    [2, "Anastasia Diaz", "frecuente", "1144556677"],
-    [3, "Martin Lopez", "frecuente", "1133221100"],
-    [4, "Sofia Ruiz", "mayorista", "1166778899"],
+    [1, "Ana Gomez", "frecuente", "1122334455"],
+    [2, "Luis Perez", "mayorista", "1199887766"],
+    [3, "Anastasia Diaz", "frecuente", "1144556677"],
+    [4, "Martin Lopez", "frecuente", "1133221100"],
+    [5, "Sofia Ruiz", "mayorista", "1166778899"],
 ]
 
 
@@ -34,7 +34,9 @@ def menu_clientes(rol):
             if rol == "admin":
                 eliminar_cliente(rol)
             else:
-                print("\n[ACCESO DENEGADO] Solo los administradores pueden eliminar clientes.")
+                print(
+                    "\n[ACCESO DENEGADO] Solo los administradores pueden eliminar clientes."
+                )
         elif opcion == "5":
             print("Volviendo al menú principal...")
         else:
@@ -49,9 +51,13 @@ def listar_clientes(rol):
     if rol == "admin":
         clientes_a_mostrar = clientes
     else:
-        clientes_a_mostrar = list(map(lambda c: [c[0], c[1], c[2], f"******{c[3][-4:]}"],clientes))
+        clientes_a_mostrar = list(
+            map(lambda c: [c[0], c[1], c[2], f"******{c[3][-4:]}"], clientes)
+        )
     for cliente in clientes_a_mostrar:
-        print(f"{cliente[0]:<3} | {cliente[1]:<18} | {cliente[2]:<10} | {cliente[3]:<11}")
+        print(
+            f"{cliente[0]:<3} | {cliente[1]:<18} | {cliente[2]:<10} | {cliente[3]:<11}"
+        )
 
 
 def mostrar_cliente(titulo, cliente):
@@ -61,8 +67,10 @@ def mostrar_cliente(titulo, cliente):
 
     print(f"{cliente[0]:<3} | {cliente[1]:<18} | {cliente[2]:<10} | {cliente[3]:<11}")
 
+
 def mostrar_telefono_oculto(telefono):
     return "*" * (len(telefono) - 4) + telefono[-4:]
+
 
 def validar_nombre():
     nombre = input("Ingrese su nombre y apellido: ").title()
@@ -72,7 +80,10 @@ def validar_nombre():
 
     return nombre
 
+
 tipos_permitidos = ("frecuente", "mayorista")
+
+
 def validar_tipo_cliente():
     tipo_cliente = input("Ingrese el tipo de cliente: ").lower()
     while tipo_cliente not in tipos_permitidos:
@@ -87,6 +98,7 @@ def validar_telefono():
         print("\033[31mERROR. El teléfono debe tener 10 números.\033[0m")
         telefono = input("Ingrese el número de teléfono: ")
     return telefono
+
 
 def crear_cliente():
     print("\n\033[1;33;44m---- CREAR NUEVO CLIENTE ----\033[0m")
@@ -133,9 +145,13 @@ def actualizar_cliente(rol):
                     if rol == "admin":
                         nuevo_telefono = validar_telefono()
                         cliente[3] = nuevo_telefono
-                        print("\033[32mNúmero de teléfono actualizado correctamente.\033[0m")
+                        print(
+                            "\033[32mNúmero de teléfono actualizado correctamente.\033[0m"
+                        )
                     else:
-                        print("\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden modificar el teléfono.\033[0m")
+                        print(
+                            "\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden modificar el teléfono.\033[0m"
+                        )
                 elif opcion == 4:
                     print("Volviendo al gestión de clientes...")
                 else:

@@ -1,8 +1,9 @@
-from usuarios import iniciar_sesion, registrar_usuario
-from productos import menu_productos
 from clientes import menu_clientes
-from ventas import menu_ventas
 from estadisticas import menu_estadisticas
+from productos import menu_productos
+from usuarios import iniciar_sesion, registrar_usuario
+from ventas import menu_ventas
+
 
 def menu_inicio():
     opcion = ""
@@ -22,6 +23,7 @@ def menu_inicio():
             print("\n¡Hasta luego!")
         else:
             print("Opción no válida. Intenta de nuevo.")
+
 
 def menu_principal(rol):
     opcion = ""
@@ -47,5 +49,6 @@ def menu_principal(rol):
             print("\n¡Gracias por usar el sistema!")
         else:
             print("Opción no válida.")
+
 
 menu_inicio()
