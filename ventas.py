@@ -95,19 +95,32 @@ def registrar_ventas(rol):
                 precio_final = subtotal - (subtotal * producto[5])  # descuento
                 producto[4] -= cantidad  # actualizar stock del producto
 
-                # agregar el producto comprado a la venta
-                una_venta.append(
-                    {
-                        "producto_id": producto[0],
-                        "nombre": producto[1],
-                        "categoria": producto[2],
-                        "cantidad": cantidad,
-                        "precio_unitario": producto[3],
-                        "descuento": producto[5],
-                        "subtotal": subtotal,
-                        "precio_final": precio_final,
-                    }
-                )
+                item_existe = None
+
+                for item in una_venta:
+                    if item["producto_id"] == producto_id:
+                        item_existe = item
+                        break
+
+                if item_existe is None:
+                    # agregar un nuevo item a la venta
+                    una_venta.append(
+                        {
+                            "producto_id": producto[0],
+                            "nombre": producto[1],
+                            "categoria": producto[2],
+                            "cantidad": cantidad,
+                            "precio_unitario": producto[3],
+                            "descuento": producto[5],
+                            "subtotal": subtotal,
+                            "precio_final": precio_final,
+                        }
+                    )
+                else:
+                    # actualizar la cantidad y el subtotal del producto existente en la venta
+                    item_existe["cantidad"] += cantidad
+                    item_existe["subtotal"] += subtotal
+                    item_existe["precio_final"] += precio_final
 
                 print(f"\nItem agregado: {producto[1]}")
                 print(f"Subtotal: ${subtotal}")
