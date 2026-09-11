@@ -213,8 +213,8 @@ def actualizar_ventas():
         print(
             f"{item['producto_id']:<12} | {item['nombre']:<22} | {item['cantidad']:<8} | ${item['precio_final']:<12}"
         )
-        print("-" * 120)
-        print(f"Total de la venta: ${venta['total']}")
+    print("-" * 120)
+    print(f"Total de la venta: ${venta['total']}")
 
     producto_id = int(input("\nIngrese el ID del producto a actualizar: "))
     item = next(
