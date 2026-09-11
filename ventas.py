@@ -13,7 +13,6 @@ Estructura de una venta:
             ...
         ],
         "total": 4110.0,
-        "estado": "activa"   # o "cancelada"
     }
 """
 
@@ -33,7 +32,7 @@ def menu_ventas(rol):
         print("5. Volver al menu principal")
         opcion = input("Elija una opcion: ")
         if opcion == "1":
-            registrar_ventas()
+            registrar_ventas(rol)
         elif opcion == "2":
             listar_ventas()
         elif opcion == "3":
@@ -61,9 +60,9 @@ def buscar_producto_por_id(producto_id):
 
 
 # CREAR
-def registrar_ventas():
+def registrar_ventas(rol):
     print("---- REGISTRAR VENTA ----")
-    listar_clientes()
+    listar_clientes(rol)
 
     cliente_id = int(input("\nIngrese ID del cliente: "))
     cliente = buscar_cliente_por_id(cliente_id)
@@ -73,33 +72,30 @@ def registrar_ventas():
         return
     else:  # Si el cliente existe, continuar con la venta
         una_venta = []
-        producto_id = 1
-        while producto_id != 0:
-            listar_productos()
+        while True:
+            print("\n\033[1;33;44m---- LISTA DE PRODUCTOS ----\033[0m")
+            listar_productos(productos)
             producto_id = int(input("\nIngrese ID del producto (0 para finalizar): "))
+            if producto_id == 0:
+                break  # salir del bucle si el usuario ingresa 0
             producto = buscar_producto_por_id(producto_id)
 
             if producto is None:
                 print("\033[31mProducto no encontrado. Intente nuevamente.\033[0m")
             else:  # si el producto existe, continuar con la venta
-                cantidad = int(
-                    input(
-                        f"Ingrese cantidad de {producto[1]} (En stock: {producto[3]}): "
-                    )
-                )
-                while cantidad <= 0 or cantidad > producto[3]:
-                    print(
-                        "Error: Cantidad inválida. Debe ser mayor que 0 y menor o igual al stock disponible."
-                    )
-                    cantidad = int(
-                        input(
-                            f"Ingrese cantidad de {producto[1]} (En stock: {producto[3]}): "
-                        )
-                    )
+                cantidad = int(input(f"Ingrese cantidad de {producto[1]}: "))
+                if cantidad <= 0:
+                    print("\033[31mCantidad inválida. Intente nuevamente.\033[0m")
+                    continue
+                elif cantidad > producto[4]:
+                    print("\033[31mStock insuficiente.\033[0m")
+                    continue
 
                 subtotal = producto[3] * cantidad  # precio unitario * cantidad
-                precio_final = subtotal - (subtotal * producto[4])
+                precio_final = subtotal - (subtotal * producto[5])  # descuento
+                producto[4] -= cantidad  # actualizar stock del producto
 
+                # agregar el producto comprado a la venta
                 una_venta.append(
                     {
                         "producto_id": producto[0],
@@ -107,11 +103,19 @@ def registrar_ventas():
                         "categoria": producto[2],
                         "cantidad": cantidad,
                         "precio_unitario": producto[3],
-                        "descuento": producto[4],
+                        "descuento": producto[5],
                         "subtotal": subtotal,
                         "precio_final": precio_final,
                     }
                 )
+
+                print(f"\nItem agregado: {producto[1]}")
+                print(f"Subtotal: ${subtotal}")
+                print(f"Precio Final: ${precio_final}")
+
+        if len(una_venta) == 0:
+            print("\033[31mNo se registró ningún producto. Venta cancelada.\033[0m")
+            return
 
         diccionario_venta = {
             "id": len(ventas) + 1,
@@ -123,12 +127,43 @@ def registrar_ventas():
         }
 
         ventas.append(diccionario_venta)
-        print("\033[32mVenta registrada correctamente.\033[0m")
+        print("\033[32m\nVenta registrada correctamente.\033[0m")
+        print(f"Total de la venta: ${diccionario_venta['total']}")
 
 
 # LEER
 def listar_ventas():
-    print("listar ventas")
+    print("\n\033[1;33;44m---- LISTA DE VENTAS ----\033[0m")
+    print(
+        f"{'ID VENTA':<8} | {'ID CLIENTE':<10} | {'NOMBRE Y APELLIDO':<17} | {'ITEMS':<5} | {'UNIDADES':<8} | {'TOTAL':<10}"
+    )
+    print("-" * 70)
+    for venta in ventas:
+        print(
+            f"{venta['id']:<8} | {venta['cliente_id']:<10} | {venta['cliente_nombre']:<17} | {len(venta['items']):<5} | {sum(item['cantidad'] for item in venta['items']):<8} | ${venta['total']:<10}"
+        )
+
+    venta_id = int(
+        input("\nIngrese el ID de la venta para ver detalles o presione 0 para salir: ")
+    )
+    if venta_id == 0:
+        return
+
+    for venta in ventas:
+        if venta["id"] == venta_id:
+            print(f"\nDetalles de la venta ID {venta_id}:")
+            print(
+                f"{'ID PRODUCTO':<12} | {'NOMBRE Y APELLIDO':<22} | {'CATEGORÍA':<12} | {'CANTIDAD':<8} | {'PRECIO UNITARIO':<15} | {'DESCUENTO':<10} | {'SUBTOTAL':<10} | {'PRECIO FINAL':<12}"
+            )
+            print("-" * 120)
+            for item in venta["items"]:
+                print(
+                    f"{item['producto_id']:<12} | {item['nombre']:<22} | {item['categoria']:<12} | {item['cantidad']:<8} | ${item['precio_unitario']:<14.2f} | {item['descuento'] * 100:<9.1f}% | ${item['subtotal']:<9} | ${item['precio_final']:<11}"
+                )
+            print("-" * 120)
+            print(f"Total de la venta: ${venta['total']}")
+            return
+    print("\033[31mID de venta no encontrado.\033[0m")
 
 
 # ACTUALIZAR

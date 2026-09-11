@@ -28,9 +28,9 @@ def menu_inicio():
 def menu_principal(rol):
     opcion = ""
     while opcion != "5":
-        print(f"\n======================================")
+        print("\n======================================")
         print(f"  SISTEMA DE GESTIÓN DEL SUPERMERCADO ({rol.upper()})  ")
-        print(f"======================================")
+        print("======================================")
         print("1. Módulo de Productos")
         print("2. Módulo de Clientes")
         print("3. Módulo de Ventas")
