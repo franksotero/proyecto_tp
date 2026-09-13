@@ -118,14 +118,15 @@ def eliminar_producto(rol):
     listar_productos(productos)
     id_buscar = int(input("\nIngresa el ID del producto a eliminar: "))
     encontrado = False
-    for i in range(len(productos)):
+    i = 0
+    while i < len(productos) and not encontrado:
         if productos[i][0] == id_buscar:
             productos.pop(i)
             print("\033[32m¡Producto eliminado!\033[0m")
             encontrado = True
-            menu_productos(rol)
+        i += 1
     if not encontrado:
-        print("\033[31mProducto no encontrado.\033[31m")
+        print("\033[31mProducto no encontrado.\033[0m")
 
 
 def mostrar_productos_poco_stock():
@@ -162,7 +163,7 @@ def ordenar_precio_prod():
 
 def menu_reportes():
     opcion = ""
-    while opcion != "3":
+    while opcion != "4":
         print("\n==================================")
         print("\033[1;34m      REPORTES Y ORDENAMIENTO     \033[0m")
         print("==================================")
@@ -171,7 +172,7 @@ def menu_reportes():
         print("3. Ver categorías únicas")
         print("4. Volver al menú de productos")
 
-        opcion = input("Elige una opción (1-3): ")
+        opcion = input("Elige una opción (1-4): ")
 
         if opcion == "1":
             ordenar_categoria_prod()
@@ -219,7 +220,7 @@ def menu_productos(rol):
             input("\nPresiona Enter para continuar...")
         elif opcion == "4":
             if rol == "admin":
-                eliminar_producto()
+                eliminar_producto(rol)
             else:
                 print(
                     "\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden eliminar un producto.\033[0m"
