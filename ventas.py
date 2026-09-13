@@ -67,6 +67,9 @@ def buscar_producto_por_id(producto_id):
 
 
 def buscar_venta_por_id(venta_id):
+    """
+        Busca una venta utilizando su ID.
+        """
     for venta in ventas:
         if venta["id"] == venta_id:
             return venta
