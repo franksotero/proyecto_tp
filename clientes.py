@@ -1,3 +1,9 @@
+"""
+Módulo para la gestión de clientes.
+Muestra las operaciones CRUD de los clientes,
+aplicando restricciones segun el rol del usuario ingresado.
+"""
+
 # CLIENTES [id, nombre, tipo_cliente, telefono]
 clientes = [
     [1, "Ana Gomez", "frecuente", "1122334455"],
@@ -45,6 +51,11 @@ def menu_clientes(rol):
 
 # CRUD CLIENTES
 def listar_clientes(rol):
+    """
+    Muestra la lista de clientes registrados.
+    Si el usuario no es 'admin', oculta parcialmente el número de teléfono por privacidad.
+    rol(str): El rol del usuario que realiza la consulta ('admin' o 'empleado').
+    """
     print("\n---- LISTA DE CLIENTES ----")
     print(f"{'ID':<3} | {'NOMBRE Y APELLIDO':<18} | {'TIPO':<10} | {'TELÉFONO':<11}")
     print("-" * 55)
@@ -73,6 +84,8 @@ def mostrar_telefono_oculto(telefono):
 
 
 def validar_nombre():
+    """Solicita y valida que el nombre y apellido ingresado tenga al menos 5 caracteres.
+    """
     nombre = input("Ingrese su nombre y apellido: ").title()
     while len(nombre) < 5:
         print("ERROR. El nombre y apellido deben tener al menos 2 caracteres.")
@@ -85,6 +98,9 @@ tipos_permitidos = ("frecuente", "mayorista")
 
 
 def validar_tipo_cliente():
+    """
+    Solicita y valida que el tipo de cliente se encuentre entre los tipos de cliente permitidos.
+    """
     tipo_cliente = input("Ingrese el tipo de cliente: ").lower()
     while tipo_cliente not in tipos_permitidos:
         print(f"ERROR. Solo se permiten: {tipos_permitidos}")
@@ -93,6 +109,9 @@ def validar_tipo_cliente():
 
 
 def validar_telefono():
+    """
+    Solicita y valida que el numero telefonico tenga una longitud minima de 10 digitos.
+    """
     telefono = input("Ingrese el número de teléfono: ")
     while len(telefono) < 10:
         print("\033[31mERROR. El teléfono debe tener 10 números.\033[0m")
@@ -101,6 +120,9 @@ def validar_telefono():
 
 
 def crear_cliente():
+    """
+    Registra un nuevo cliente solicitando y validando sus datos personales.
+    """
     print("\n\033[1;33;44m---- CREAR NUEVO CLIENTE ----\033[0m")
     if len(clientes) > 0:
         ultimo_id = max(fila[0] for fila in clientes)
@@ -117,6 +139,11 @@ def crear_cliente():
 
 
 def actualizar_cliente(rol):
+    """
+    Permite modificar los datos (nombre, tipo o teléfono) de un cliente existente.
+    rol (str): El rol del usuario autenticado.
+    Solo administradores pueden modificar el telefono, por privacidad.
+    """
     print("\n\033[1;33;44m---- ACTUALIZAR DATOS DE UN CLIENTE ----\033[0m")
     listar_clientes(rol)
     id_buscar = int(input("\nIngresa el ID del cliente que quieres modificar: "))

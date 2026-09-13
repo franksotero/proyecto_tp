@@ -4,8 +4,11 @@ from productos import menu_productos
 from usuarios import iniciar_sesion, registrar_usuario
 from ventas import menu_ventas
 
-
 def menu_inicio():
+    """
+    Muestra el menú inicial de bienvenida.
+    Permite al usuario iniciar sesión, registrar una nueva cuenta o salir de la aplicación.
+    """
     opcion = ""
     while opcion != "3":
         print("\n=== BIENVENIDO AL SISTEMA DEL SUPERMERCADO ===")
@@ -26,6 +29,9 @@ def menu_inicio():
 
 
 def menu_principal(rol):
+    """Despliega el menu principal del sistema segun el rol del usuario ingresado
+    El rol del usuario autenticado puede ser 'admin' o 'empleado'
+    """
     opcion = ""
     while opcion != "5":
         print("\n======================================")

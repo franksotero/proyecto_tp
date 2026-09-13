@@ -1,4 +1,11 @@
+"""
+Modulo para la visualizacion de reportes y estadisticas generales del sistema.
+"""
+
 def menu_estadisticas():
+    """
+    Despliega el menu de opciones para consultar estadisticas de productos, clientes, ventas o reportes generales
+    """
     opcion = ""
     while opcion != "6":
         print("\n==================================")

@@ -46,6 +46,10 @@ def menu_ventas(rol):
 
 
 def buscar_cliente_por_id(cliente_id):
+    """Busca un cliente por su identificador único.
+    cliente_id(int): ID del cliente a buscar.
+    Return:  Datos del cliente si se encuentra, none en caso contrario.
+    """
     for cliente in clientes:
         if cliente[0] == cliente_id:
             return cliente
@@ -53,6 +57,9 @@ def buscar_cliente_por_id(cliente_id):
 
 
 def buscar_producto_por_id(producto_id):
+    """
+    Busca un producto en el inventario utilizando su ID.
+    """
     for producto in productos:
         if producto[0] == producto_id:
             return producto
@@ -77,40 +84,33 @@ def registrar_ventas(rol):
     if cliente is None:
         print("\033[31mCliente no encontrado. Operación cancelada.\033[0m")
         return
-    else:  # Si el cliente existe, continuar con la venta
-        una_venta = []
-        while True:
-            print("\n\033[1;33;44m---- LISTA DE PRODUCTOS ----\033[0m")
-            listar_productos(productos)
-            producto_id = int(input("\nIngrese ID del producto (0 para finalizar): "))
-            if producto_id == 0:
-                break  # salir del bucle si el usuario ingresa 0
-            producto = buscar_producto_por_id(producto_id)
 
-            if producto is None:
-                print("\033[31mProducto no encontrado. Intente nuevamente.\033[0m")
-            else:  # si el producto existe, continuar con la venta
-                cantidad = int(input(f"Ingrese cantidad de {producto[1]}: "))
-                if cantidad <= 0:
-                    print("\033[31mCantidad inválida. Intente nuevamente.\033[0m")
-                    continue
-                elif cantidad > producto[4]:
-                    print("\033[31mStock insuficiente.\033[0m")
-                    continue
+    una_venta = []
 
-                subtotal = producto[3] * cantidad  # precio unitario * cantidad
-                precio_final = subtotal - (subtotal * producto[5])  # descuento
-                producto[4] -= cantidad  # actualizar stock del producto
+    print("\n\033[1;33;44m---- LISTA DE PRODUCTOS ----\033[0m")
+    listar_productos(productos)
+    producto_id = int(input("\nIngrese ID del producto (0 para finalizar): "))
+    while producto_id != 0:
+        producto = buscar_producto_por_id(producto_id)
+        if producto is None:
+            print("\033[31mProducto no encontrado. Intente nuevamente.\033[0m")
+        else:
+            cantidad = int(input(f"Ingrese cantidad de {producto[1]}: "))
+            if cantidad <= 0:
+                print("\033[31mCantidad inválida. Intente nuevamente.\033[0m")
+            elif cantidad > producto[4]:
+                print("\033[31mStock insuficiente.\033[0m")
+            else:
+                subtotal = producto[3] * cantidad
+                precio_final = subtotal - (subtotal * producto[5])
+                producto[4] -= cantidad  # actualizar stock
 
                 item_existe = None
-
                 for item in una_venta:
                     if item["producto_id"] == producto_id:
                         item_existe = item
-                        break
 
                 if item_existe is None:
-                    # agregar un nuevo item a la venta
                     una_venta.append(
                         {
                             "producto_id": producto[0],
@@ -124,7 +124,6 @@ def registrar_ventas(rol):
                         }
                     )
                 else:
-                    # actualizar la cantidad y el subtotal del producto existente en la venta
                     item_existe["cantidad"] += cantidad
                     item_existe["subtotal"] += subtotal
                     item_existe["precio_final"] += precio_final
@@ -133,26 +132,31 @@ def registrar_ventas(rol):
                 print(f"Subtotal: ${subtotal}")
                 print(f"Precio Final: ${precio_final}")
 
-        if len(una_venta) == 0:
-            print("\033[31mNo se registró ningún producto. Venta cancelada.\033[0m")
-            return
+        print("\n\033[1;33;44m---- LISTA DE PRODUCTOS ----\033[0m")
+        listar_productos(productos)
+        producto_id = int(input("\nIngrese ID del producto (0 para finalizar): "))
 
-        diccionario_venta = {
-            "id": max((venta["id"] for venta in ventas), default=0) + 1,
-            "cliente_id": cliente[0],
-            "cliente_nombre": cliente[1],
-            "items": una_venta,
-            # Suma de los precios finales de cada item
-            "total": sum(item["precio_final"] for item in una_venta),
-        }
+    if len(una_venta) == 0:
+        print("\033[31mNo se registró ningún producto. Venta cancelada.\033[0m")
+        return
 
-        ventas.append(diccionario_venta)
-        print("\033[32m\nVenta registrada correctamente.\033[0m")
-        print(f"Total de la venta: ${diccionario_venta['total']}")
+    diccionario_venta = {
+        "id": max((venta["id"] for venta in ventas), default=0) + 1,
+        "cliente_id": cliente[0],
+        "cliente_nombre": cliente[1],
+        "items": una_venta,
+        "total": sum(item["precio_final"] for item in una_venta),
+    }
 
+    ventas.append(diccionario_venta)
+    print("\033[32m\nVenta registrada correctamente.\033[0m")
+    print(f"Total de la venta: ${diccionario_venta['total']}")
 
 # LEER
 def listar_ventas():
+    """
+    Muestra el historial resumido de ventas y permite consultar los detalles de una venta especifica.
+    """
     print("\n\033[1;33;44m---- LISTA DE VENTAS ----\033[0m")
     print(
         f"{'ID VENTA':<8} | {'ID CLIENTE':<10} | {'NOMBRE Y APELLIDO':<17} | {'ITEMS':<5} | {'UNIDADES':<8} | {'TOTAL':<10}"
@@ -188,6 +192,9 @@ def listar_ventas():
 
 # ACTUALIZAR
 def actualizar_ventas():
+    """
+    Permite modificar la cantidad de productos de una venta o eliminarlos, reajustando el stock.
+    """
     print("---- ACTUALIZAR VENTAS ----")
 
     print("\n\033[1;33;44m---- LISTA DE VENTAS ----\033[0m")
@@ -274,6 +281,9 @@ def actualizar_ventas():
 
 # ELIMINAR
 def eliminar_ventas():
+    """
+    Elimina un registro de venta y reintegra las unidades al stock del inventario.
+    """
     print("---- ELIMINAR VENTA ----")
 
     if len(ventas) == 0:
