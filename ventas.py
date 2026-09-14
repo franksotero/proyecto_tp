@@ -210,14 +210,7 @@ def actualizar_ventas():
     Permite modificar la cantidad de productos de una venta o eliminarlos, reajustando el stock.
     """
     print("---- ACTUALIZAR VENTAS ----")
-
-    print("\n\033[1;33;44m---- LISTA DE VENTAS ----\033[0m")
-    print(f"{'ID VENTA':<8} | {'NOMBRE Y APELLIDO':<17} | {'ITEMS':<5} | {'TOTAL':<10}")
-    print("-" * 70)
-    for venta in ventas:
-        print(
-            f"{venta['id']:<8} | {venta['cliente_nombre']:<17} | {len(venta['items']):<5} | ${venta['total']:<10}"
-        )
+    mostrar_ventas()
 
     venta_id = int(input("\nIngrese el ID de la venta a actualizar: "))
     venta = buscar_venta_por_id(venta_id)
@@ -226,27 +219,20 @@ def actualizar_ventas():
         print("\033[31mID de venta no encontrado.\033[0m")
         return
 
-    print(
-        f"{'ID PRODUCTO':<12} | {'NOMBRE Y APELLIDO':<22} | {'CANTIDAD':<8} | {'PRECIO FINAL':<12}"
-    )
-    print("-" * 120)
-    for item in venta["items"]:
-        print(
-            f"{item['producto_id']:<12} | {item['nombre']:<22} | {item['cantidad']:<8} | ${item['precio_final']:<12}"
-        )
-    print("-" * 120)
-    print(f"Total de la venta: ${venta['total']}")
+    mostrar_detalles_venta(venta)
 
     producto_id = int(input("\nIngrese el ID del producto a actualizar: "))
-    item = next(
-        (item for item in venta["items"] if item["producto_id"] == producto_id),
-        None,
-    )
+    # buscamos el item que coincida con el ID del producto
+    item_encontrado = [
+        item for item in venta["items"] if item["producto_id"] == producto_id
+    ]
 
-    if item is None:
+    if len(item_encontrado) == 0:
         print("\033[31mID de producto no encontrado.\033[0m")
         return
 
+    # obtenemos el primer (y único) item que coincide con el producto_id
+    item = item_encontrado[0]
     producto = buscar_producto_por_id(producto_id)
     cantidad_anterior = item["cantidad"]
     producto[4] += cantidad_anterior
