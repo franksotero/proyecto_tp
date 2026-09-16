@@ -71,3 +71,35 @@ def registrar_venta():
     venta = [f"V{len(ventas) + 1}", cliente[1], producto[1], cantidad, total]
     ventas.append(venta)
     print("\033[32mVenta registrada. Cliente:", cliente[1], "- Total:\033[0m", total)
+
+
+def reporte_ventas():
+    print("\n--- REPORTE DE VENTAS ---")
+    
+    if len(ventas) == 0:
+        print("No hay ventas registradas aún.")
+        return
+        
+    total_ingresos = sum([fila[4] for fila in ventas])
+    
+    recaudacion_producto = {}
+    for fila in ventas:
+        producto = fila[2]
+        total_venta = fila[4]
+        
+        if producto not in recaudacion_producto:
+            recaudacion_producto[producto] = total_venta
+        else:
+            recaudacion_producto[producto] += total_venta
+
+    print(f"Cantidad total de ventas: {len(ventas)}")
+    print(f"Ingresos totales: ${total_ingresos:.2f}\n")
+    
+    print(f"{'PRODUCTO':<22} | {'RECAUDACIÓN':<15}")
+    print("-" * 40)
+    
+    prod_ordenados = sorted(recaudacion_producto.items(), key=lambda p: p[1], reverse=True)
+    
+    for prod, total in prod_ordenados:
+        print(f"{prod:<22} | ${total:<14.2f}")
+    print("-" * 40)
