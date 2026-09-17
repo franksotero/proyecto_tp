@@ -1,8 +1,9 @@
-from clientes import menu_clientes,clientes
+from clientes import clientes, menu_clientes
 from estadisticas import menu_estadisticas
 from productos import menu_productos
 from usuarios import iniciar_sesion, registrar_usuario
-from ventas import menu_ventas,ventas
+from ventas import menu_ventas, ventas
+
 
 def menu_inicio():
     """
@@ -50,7 +51,7 @@ def menu_principal(rol):
         elif opcion == "3":
             menu_ventas(rol)
         elif opcion == "4":
-            menu_estadisticas(ventas,clientes,rol)
+            menu_estadisticas(ventas, clientes, rol)
         elif opcion == "5":
             print("\n¡Gracias por usar el sistema!")
         else:
