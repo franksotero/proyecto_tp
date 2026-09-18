@@ -1,3 +1,5 @@
+from datetime import date
+from functools import reduce
 from clientes import clientes, listar_clientes
 from productos import listar_productos, productos
 
@@ -20,7 +22,8 @@ ventas = [
     {
         "id": 1,
         "cliente_id": 1,
-        "cliente_nombre": "Lionel Messi",
+        "cliente_nombre": "Ana Gomez",
+        "fecha": (18, 9, 2026),
         "items": [
             {
                 "producto_id": 1,
@@ -30,7 +33,7 @@ ventas = [
                 "precio_unitario": 1200.0,
                 "descuento": 0.0,
                 "subtotal": 2400.0,
-                "precio_final": 2400.0
+                "precio_final": 2400.0,
             },
             {
                 "producto_id": 2,
@@ -40,15 +43,16 @@ ventas = [
                 "precio_unitario": 2500.0,
                 "descuento": 0.10,
                 "subtotal": 2500.0,
-                "precio_final": 2250.0
-            }
+                "precio_final": 2250.0,
+            },
         ],
-        "total": 4650.0
+        "total": 4650.0,
     },
     {
         "id": 2,
         "cliente_id": 2,
-        "cliente_nombre": "Ricardo Bochini",
+        "cliente_nombre": "Luis Perez",
+        "fecha": (20, 8, 2026),
         "items": [
             {
                 "producto_id": 6,
@@ -58,7 +62,7 @@ ventas = [
                 "precio_unitario": 1500.0,
                 "descuento": 0.0,
                 "subtotal": 7500.0,
-                "precio_final": 7500.0
+                "precio_final": 7500.0,
             },
             {
                 "producto_id": 10,
@@ -68,15 +72,16 @@ ventas = [
                 "precio_unitario": 400.0,
                 "descuento": 0.15,
                 "subtotal": 4000.0,
-                "precio_final": 3400.0
-            }
+                "precio_final": 3400.0,
+            },
         ],
-        "total": 10900.0
+        "total": 10900.0,
     },
     {
         "id": 3,
         "cliente_id": 3,
-        "cliente_nombre": "Santiago Montiel",
+        "cliente_nombre": "Anastasia Diaz",
+        "fecha": (14, 6, 2026),
         "items": [
             {
                 "producto_id": 4,
@@ -86,17 +91,17 @@ ventas = [
                 "precio_unitario": 950.0,
                 "descuento": 0.0,
                 "subtotal": 2850.0,
-                "precio_final": 2850.0
+                "precio_final": 2850.0,
             }
         ],
-        "total": 2850.0
-    }
+        "total": 2850.0,
+    },
 ]
 
 
 def menu_ventas(rol):
     opcion = ""
-    while opcion != "5":
+    while opcion != "6":
         print("\n=================================")
         print(f"\033[1;34m        GESTIÓN DE VENTAS ({rol.upper()})         \033[0m")
         print("=================================")
@@ -104,17 +109,25 @@ def menu_ventas(rol):
         print("2. Consultar ventas")
         print("3. Actualizar ventas")
         print("4. Eliminar ventas")
-        print("5. Volver al menu principal")
+        print("5. Consultar compras de un cliente")
+        print("6. Volver al menu principal")
         opcion = input("Elija una opcion: ")
         if opcion == "1":
-            registrar_ventas(rol)
+            registrar_ventas()
         elif opcion == "2":
             listar_ventas()
         elif opcion == "3":
             actualizar_ventas()
         elif opcion == "4":
-            eliminar_ventas()
+            if rol == "admin":
+                eliminar_ventas()
+            else:
+                print(
+                    "\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden eliminar una venta.\033[0m"
+                )
         elif opcion == "5":
+            consultar_compras_de_cliente()
+        elif opcion == "6":
             print("\033[1;34mRegresando al menu principal...\033[0m")
         else:
             print("\033[31mOpción invalida\033[0m")
@@ -151,6 +164,34 @@ def buscar_venta_por_id(venta_id):
     return None
 
 
+def consultar_compras_de_cliente():
+    """
+    Pide un ID de cliente, muestra sus datos y el listado de ventas asociadas a ese cliente.
+    """
+    id_buscar = int(input("\nIngrese el ID del cliente a consultar: "))
+    cliente = buscar_cliente_por_id(id_buscar)
+    if cliente is None:
+        print("\033[31mCliente no encontrado.\033[0m")
+        return
+
+    print("\n--- DATOS DEL CLIENTE ---")
+    print(
+        f"ID: {cliente['id']} | Nombre: {cliente['nombre']} | Tipo: {cliente['tipo_cliente']}"
+    )
+
+    compras_cliente = [venta for venta in ventas if venta["cliente_id"] == id_buscar]
+
+    if len(compras_cliente) == 0:
+        print("Este cliente no tiene compras registradas.")
+        return
+
+    print(f"\n--- COMPRAS DE {cliente['nombre'].upper()} ---")
+    for venta in compras_cliente:
+        print(
+            f"Venta ID {venta['id']} | Fecha: {venta['fecha']} | Total: ${venta['total']}"
+        )
+
+
 def mostrar_ventas():
     print("\n\033[1;33;44m---- LISTA DE VENTAS ----\033[0m")
     print(
@@ -161,6 +202,11 @@ def mostrar_ventas():
         print(
             f"{venta['id']:<8} | {venta['cliente_id']:<10} | {venta['cliente_nombre']:<17} | {len(venta['items']):<5} | {sum(item['cantidad'] for item in venta['items']):<8} | ${venta['total']:<10}"
         )
+
+    total_facturado = reduce(
+        lambda acumulado, venta: acumulado + venta["total"], ventas, 0
+    )
+    print(f"\n\033[1;32mTotal facturado: ${total_facturado}\033[0m")
 
 
 def mostrar_detalles_venta(venta):
@@ -178,7 +224,7 @@ def mostrar_detalles_venta(venta):
 
 
 # CREAR
-def registrar_ventas(rol):
+def registrar_ventas():
     print("---- REGISTRAR VENTA ----")
     listar_clientes()
 
@@ -193,6 +239,7 @@ def registrar_ventas(rol):
 
     print("\n\033[1;33;44m---- LISTA DE PRODUCTOS ----\033[0m")
     listar_productos(productos)
+
     producto_id = int(input("\nIngrese ID del producto (0 para finalizar): "))
     while producto_id != 0:
         producto = buscar_producto_por_id(producto_id)
@@ -203,17 +250,19 @@ def registrar_ventas(rol):
             if cantidad <= 0:
                 print("\033[31mCantidad inválida. Intente nuevamente.\033[0m")
             elif cantidad > producto[4]:
-                print("\033[31mStock insuficiente.\033[0m")
+                print("\033[31mStock insuficiente. Intente nuevamente.\033[0m")
             else:
                 subtotal = producto[3] * cantidad
                 precio_final = subtotal - (subtotal * producto[5])
                 producto[4] -= cantidad  # actualizar stock
 
+                # verificamos si el producto ya está en la venta
                 item_existe = None
                 for item in una_venta:
                     if item["producto_id"] == producto_id:
                         item_existe = item
 
+                # si el producto no existe en la venta, lo agregamos
                 if item_existe is None:
                     una_venta.append(
                         {
@@ -228,13 +277,12 @@ def registrar_ventas(rol):
                         }
                     )
                 else:
+                    # si el producto existe en la venta, actualizamos la cantidad y los totales
                     item_existe["cantidad"] += cantidad
                     item_existe["subtotal"] += subtotal
                     item_existe["precio_final"] += precio_final
 
-                print(f"\nItem agregado: {producto[1]}")
-                print(f"Subtotal: ${subtotal}")
-                print(f"Precio Final: ${precio_final}")
+                print(f"\n\033[32mProducto {producto[1]} agregado a la venta.\033[0m")
 
         print("\n\033[1;33;44m---- LISTA DE PRODUCTOS ----\033[0m")
         listar_productos(productos)
@@ -244,10 +292,12 @@ def registrar_ventas(rol):
         print("\033[31mNo se registró ningún producto. Venta cancelada.\033[0m")
         return
 
+    hoy = date.today()
     diccionario_venta = {
         "id": max((venta["id"] for venta in ventas), default=0) + 1,
         "cliente_id": cliente["id"],
         "cliente_nombre": cliente["nombre"],
+        "fecha": (hoy.day, hoy.month, hoy.year),
         "items": una_venta,
         "total": sum(item["precio_final"] for item in una_venta),
     }
