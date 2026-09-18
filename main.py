@@ -1,10 +1,15 @@
-from usuarios import iniciar_sesion, registrar_usuario
-from productos import menu_productos
-from clientes import menu_clientes
-from ventas import menu_ventas
+from clientes import clientes, menu_clientes
 from estadisticas import menu_estadisticas
+from productos import menu_productos
+from usuarios import iniciar_sesion, registrar_usuario
+from ventas import menu_ventas, ventas
+
 
 def menu_inicio():
+    """
+    Muestra el menú inicial de bienvenida.
+    Permite al usuario iniciar sesión, registrar una nueva cuenta o salir de la aplicación.
+    """
     opcion = ""
     while opcion != "3":
         print("\n=== BIENVENIDO AL SISTEMA DEL SUPERMERCADO ===")
@@ -23,12 +28,16 @@ def menu_inicio():
         else:
             print("Opción no válida. Intenta de nuevo.")
 
+
 def menu_principal(rol):
+    """Despliega el menu principal del sistema segun el rol del usuario ingresado
+    El rol del usuario autenticado puede ser 'admin' o 'empleado'
+    """
     opcion = ""
     while opcion != "5":
-        print(f"\n======================================")
+        print("\n======================================")
         print(f"  SISTEMA DE GESTIÓN DEL SUPERMERCADO ({rol.upper()})  ")
-        print(f"======================================")
+        print("======================================")
         print("1. Módulo de Productos")
         print("2. Módulo de Clientes")
         print("3. Módulo de Ventas")
@@ -42,10 +51,11 @@ def menu_principal(rol):
         elif opcion == "3":
             menu_ventas(rol)
         elif opcion == "4":
-            menu_estadisticas(rol)
+            menu_estadisticas(ventas, clientes, rol)
         elif opcion == "5":
             print("\n¡Gracias por usar el sistema!")
         else:
             print("Opción no válida.")
+
 
 menu_inicio()
