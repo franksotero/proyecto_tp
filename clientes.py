@@ -1,3 +1,5 @@
+import re
+
 """
 Módulo para la gestión de clientes.
 Muestra las operaciones CRUD de los clientes,
@@ -84,11 +86,17 @@ def mostrar_telefono_oculto(telefono):
 
 
 def validar_nombre():
-    """Solicita y valida que el nombre y apellido ingresado tenga al menos 5 caracteres.
+    """Solicita y valida, con una expresión regular, que se ingresen nombre
+    y apellido usando solo letras (sin números ni símbolos) separados por un espacio.
     """
+
+    patron = r"[A-Za-zÀ-ÿ]+ [A-Za-zÀ-ÿ]+"
     nombre = input("Ingrese su nombre y apellido: ").title()
-    while len(nombre) < 5:
-        print("ERROR. El nombre y apellido deben tener al menos 2 caracteres.")
+
+    while re.fullmatch(patron, nombre) is None:
+        print(
+            "ERROR. Ingrese nombre y apellido válidos (solo letras, separados por un espacio)."
+        )
         nombre = input("Ingrese su nombre y apellido: ").title()
 
     return nombre
@@ -101,6 +109,7 @@ def validar_tipo_cliente():
     """
     Solicita y valida que el tipo de cliente se encuentre entre los tipos de cliente permitidos.
     """
+
     tipo_cliente = input("Ingrese el tipo de cliente: ").lower()
     while tipo_cliente not in tipos_permitidos:
         print(f"ERROR. Solo se permiten: {tipos_permitidos}")
@@ -110,11 +119,15 @@ def validar_tipo_cliente():
 
 def validar_telefono():
     """
-    Solicita y valida que el numero telefonico tenga una longitud minima de 10 digitos.
+    Solicita y valida, con una expresión regular, que el teléfono tenga
+    10 dígitos numéricos (sin letras ni símbolos).
     """
+
+    patron = r"\d{10}"
     telefono = input("Ingrese el número de teléfono: ")
-    while len(telefono) < 10:
-        print("\033[31mERROR. El teléfono debe tener 10 números.\033[0m")
+
+    while re.fullmatch(patron, telefono) is None:
+        print("ERROR. El teléfono debe tener al menos 10 dígitos numéricos.")
         telefono = input("Ingrese el número de teléfono: ")
     return telefono
 
