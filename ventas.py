@@ -16,7 +16,82 @@ Estructura de una venta:
     }
 """
 
-ventas = []
+ventas = [
+    {
+        "id": 1,
+        "cliente_id": 1,
+        "cliente_nombre": "Lionel Messi",
+        "items": [
+            {
+                "producto_id": 1,
+                "nombre": "Pan lactal",
+                "categoria": "almacen",
+                "cantidad": 2,
+                "precio_unitario": 1200.0,
+                "descuento": 0.0,
+                "subtotal": 2400.0,
+                "precio_final": 2400.0
+            },
+            {
+                "producto_id": 2,
+                "nombre": "Detergente",
+                "categoria": "limpieza",
+                "cantidad": 1,
+                "precio_unitario": 2500.0,
+                "descuento": 0.10,
+                "subtotal": 2500.0,
+                "precio_final": 2250.0
+            }
+        ],
+        "total": 4650.0
+    },
+    {
+        "id": 2,
+        "cliente_id": 2,
+        "cliente_nombre": "Ricardo Bochini",
+        "items": [
+            {
+                "producto_id": 6,
+                "nombre": "Arroz",
+                "categoria": "almacen",
+                "cantidad": 5,
+                "precio_unitario": 1500.0,
+                "descuento": 0.0,
+                "subtotal": 7500.0,
+                "precio_final": 7500.0
+            },
+            {
+                "producto_id": 10,
+                "nombre": "Aceite",
+                "categoria": "almacen",
+                "cantidad": 10,
+                "precio_unitario": 400.0,
+                "descuento": 0.15,
+                "subtotal": 4000.0,
+                "precio_final": 3400.0
+            }
+        ],
+        "total": 10900.0
+    },
+    {
+        "id": 3,
+        "cliente_id": 3,
+        "cliente_nombre": "Santiago Montiel",
+        "items": [
+            {
+                "producto_id": 4,
+                "nombre": "Chocolate",
+                "categoria": "golosinas",
+                "cantidad": 3,
+                "precio_unitario": 950.0,
+                "descuento": 0.0,
+                "subtotal": 2850.0,
+                "precio_final": 2850.0
+            }
+        ],
+        "total": 2850.0
+    }
+]
 
 
 def menu_ventas(rol):
