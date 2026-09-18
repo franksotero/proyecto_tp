@@ -6,13 +6,38 @@ Muestra las operaciones CRUD de los clientes,
 aplicando restricciones segun el rol del usuario ingresado.
 """
 
-# CLIENTES [id, nombre, tipo_cliente, telefono]
+# Crea una lista de diccionarios clientes con datos de ejemplo para pruebas
 clientes = [
-    [1, "Ana Gomez", "frecuente", "1122334455"],
-    [2, "Luis Perez", "mayorista", "1199887766"],
-    [3, "Anastasia Diaz", "frecuente", "1144556677"],
-    [4, "Martin Lopez", "frecuente", "1133221100"],
-    [5, "Sofia Ruiz", "mayorista", "1166778899"],
+    {
+        "id": 1,
+        "nombre": "Ana Gomez",
+        "tipo_cliente": "frecuente",
+        "telefono": "1122334455",
+    },
+    {
+        "id": 2,
+        "nombre": "Luis Perez",
+        "tipo_cliente": "mayorista",
+        "telefono": "1199887766",
+    },
+    {
+        "id": 3,
+        "nombre": "Anastasia Diaz",
+        "tipo_cliente": "frecuente",
+        "telefono": "1144556677",
+    },
+    {
+        "id": 4,
+        "nombre": "Martin Lopez",
+        "tipo_cliente": "frecuente",
+        "telefono": "1133221100",
+    },
+    {
+        "id": 5,
+        "nombre": "Sofia Ruiz",
+        "tipo_cliente": "mayorista",
+        "telefono": "1166778899",
+    },
 ]
 
 
@@ -24,9 +49,9 @@ def menu_clientes(rol):
         print("=================================")
 
         print("1. Listar clientes")
-        print("2. Registrar nuevo cliente ")
-        print("3. Modificar datos de cliente ")
-        print("4. Eliminar cliente ")
+        print("2. Registrar nuevo cliente")
+        print("3. Actualizar datos de un cliente")
+        print("4. Eliminar un cliente")
         print("5. Volver al menú principal")
         print("=================================")
 
@@ -51,7 +76,7 @@ def menu_clientes(rol):
             print("\033[31mOpción no válida. Intente nuevamente.\033[0m")
 
 
-# CRUD CLIENTES
+# LEER
 def listar_clientes(rol):
     """
     Muestra la lista de clientes registrados.
@@ -65,7 +90,15 @@ def listar_clientes(rol):
         clientes_a_mostrar = clientes
     else:
         clientes_a_mostrar = list(
-            map(lambda c: [c[0], c[1], c[2], f"******{c[3][-4:]}"], clientes)
+            map(
+                lambda c: [
+                    c["id"],
+                    c["nombre"],
+                    c["tipo_cliente"],
+                    f"******{c['telefono'][-4:]}",
+                ],
+                clientes,
+            )
         )
     for cliente in clientes_a_mostrar:
         print(
@@ -79,10 +112,6 @@ def mostrar_cliente(titulo, cliente):
     print("-" * 55)
 
     print(f"{cliente[0]:<3} | {cliente[1]:<18} | {cliente[2]:<10} | {cliente[3]:<11}")
-
-
-def mostrar_telefono_oculto(telefono):
-    return "*" * (len(telefono) - 4) + telefono[-4:]
 
 
 def validar_nombre():
@@ -102,14 +131,12 @@ def validar_nombre():
     return nombre
 
 
-tipos_permitidos = ("frecuente", "mayorista")
-
-
 def validar_tipo_cliente():
     """
     Solicita y valida que el tipo de cliente se encuentre entre los tipos de cliente permitidos.
     """
 
+    tipos_permitidos = ("frecuente", "mayorista")
     tipo_cliente = input("Ingrese el tipo de cliente: ").lower()
     while tipo_cliente not in tipos_permitidos:
         print(f"ERROR. Solo se permiten: {tipos_permitidos}")
@@ -132,6 +159,7 @@ def validar_telefono():
     return telefono
 
 
+# CREAR
 def crear_cliente():
     """
     Registra un nuevo cliente solicitando y validando sus datos personales.
@@ -151,6 +179,7 @@ def crear_cliente():
     print("\033[32m¡Cliente creado con éxito!\033[0m")
 
 
+# ACTUALIZAR
 def actualizar_cliente(rol):
     """
     Permite modificar los datos (nombre, tipo o teléfono) de un cliente existente.
@@ -200,6 +229,7 @@ def actualizar_cliente(rol):
         print("\033[31mEl ID no existe.\033[0m")
 
 
+# ELIMINAR
 def eliminar_cliente(rol):
     print("\n\033[1;33;44m---- ELIMINAR UN CLIENTE ----\033[0m")
     listar_clientes(rol)
