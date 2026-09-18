@@ -126,7 +126,7 @@ def buscar_cliente_por_id(cliente_id):
     Return:  Datos del cliente si se encuentra, none en caso contrario.
     """
     for cliente in clientes:
-        if cliente[0] == cliente_id:
+        if cliente["id"] == cliente_id:
             return cliente
     return None
 
@@ -180,7 +180,7 @@ def mostrar_detalles_venta(venta):
 # CREAR
 def registrar_ventas(rol):
     print("---- REGISTRAR VENTA ----")
-    listar_clientes(rol)
+    listar_clientes()
 
     cliente_id = int(input("\nIngrese ID del cliente: "))
     cliente = buscar_cliente_por_id(cliente_id)
@@ -246,8 +246,8 @@ def registrar_ventas(rol):
 
     diccionario_venta = {
         "id": max((venta["id"] for venta in ventas), default=0) + 1,
-        "cliente_id": cliente[0],
-        "cliente_nombre": cliente[1],
+        "cliente_id": cliente["id"],
+        "cliente_nombre": cliente["nombre"],
         "items": una_venta,
         "total": sum(item["precio_final"] for item in una_venta),
     }
