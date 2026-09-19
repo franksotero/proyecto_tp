@@ -8,7 +8,7 @@ ventas = [
     {
         "id": 1,
         "cliente_id": 1,
-        "cliente_nombre": "Ana Gomez",
+        "cliente_nombre": "Lionel Messi",
         "fecha": (18, 9, 2026),
         "items": [
             {
@@ -37,7 +37,7 @@ ventas = [
     {
         "id": 2,
         "cliente_id": 2,
-        "cliente_nombre": "Luis Perez",
+        "cliente_nombre": "Santiago Montiel",
         "fecha": (20, 8, 2026),
         "items": [
             {
@@ -66,7 +66,7 @@ ventas = [
     {
         "id": 3,
         "cliente_id": 3,
-        "cliente_nombre": "Anastasia Diaz",
+        "cliente_nombre": "Brian Sarmi",
         "fecha": (14, 6, 2026),
         "items": [
             {
