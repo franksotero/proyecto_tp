@@ -3,20 +3,6 @@ from functools import reduce
 from clientes import clientes, listar_clientes
 from productos import listar_productos, productos
 
-"""
-Estructura de una venta:
-    {
-        "id": 1,
-        "cliente_id": 1,
-        "cliente_nombre": "Ana Gomez",
-        "items": [
-            {"producto_id": 1, "nombre": "Pan lactal", "categoria": "almacen",
-             "cantidad": 2, "precio_unitario": 1200.0, "descuento": 0.0, "subtotal": 2400.0},
-            ...
-        ],
-        "total": 4110.0,
-    }
-"""
 
 ventas = [
     {
@@ -100,6 +86,12 @@ ventas = [
 
 
 def menu_ventas(rol):
+    """
+    Muestra el menú de gestión de ventas y deriva a la operación elegida
+    según la opción ingresada por el usuario. La opción de eliminar
+    ventas está restringida a usuarios con rol 'admin'.
+    """
+
     opcion = ""
     while opcion != "6":
         print("\n=================================")
@@ -146,8 +138,11 @@ def buscar_cliente_por_id(cliente_id):
 
 def buscar_producto_por_id(producto_id):
     """
-    Busca un producto en el inventario utilizando su ID.
+    Busca un producto en la matriz de productos utilizando su ID.
+    producto_id (int): ID del producto a buscar.
+    Return: la fila del producto si se encuentra, None en caso contrario.
     """
+
     for producto in productos:
         if producto[0] == producto_id:
             return producto
@@ -156,8 +151,11 @@ def buscar_producto_por_id(producto_id):
 
 def buscar_venta_por_id(venta_id):
     """
-    Busca una venta utilizando su ID.
+    Busca una venta en la lista de ventas utilizando su ID.
+    venta_id (int): ID de la venta a buscar.
+    Return: el diccionario de la venta si se encuentra, None en caso contrario.
     """
+
     for venta in ventas:
         if venta["id"] == venta_id:
             return venta
@@ -193,6 +191,11 @@ def consultar_compras_de_cliente():
 
 
 def mostrar_ventas():
+    """
+    Muestra un resumen tabulado de todas las ventas registradas,
+    junto con el total general facturado calculado con reduce.
+    """
+
     print("\n\033[1;33;44m---- LISTA DE VENTAS ----\033[0m")
     print(
         f"{'ID VENTA':<8} | {'ID CLIENTE':<10} | {'NOMBRE Y APELLIDO':<17} | {'ITEMS':<5} | {'UNIDADES':<8} | {'TOTAL':<10}"
@@ -210,6 +213,11 @@ def mostrar_ventas():
 
 
 def mostrar_detalles_venta(venta):
+    """
+    Muestra el detalle de los productos de una venta puntual.
+    venta (dict): la venta cuyos items se van a mostrar.
+    """
+
     print(f"\nDetalles de la venta ID {venta['id']}:")
     print(
         f"{'ID PRODUCTO':<12} | {'NOMBRE Y APELLIDO':<22} | {'CATEGORÍA':<12} | {'CANTIDAD':<8} | {'PRECIO UNITARIO':<15} | {'DESCUENTO':<10} | {'SUBTOTAL':<10} | {'PRECIO FINAL':<12}"
@@ -225,6 +233,10 @@ def mostrar_detalles_venta(venta):
 
 # CREAR
 def registrar_ventas():
+    """
+    Permite registrar una nueva venta, seleccionando un cliente y agregando productos.
+    Actualiza el stock de los productos vendidos y calcula el total de la venta.
+    """
     print("---- REGISTRAR VENTA ----")
     listar_clientes()
 
@@ -407,8 +419,10 @@ def actualizar_ventas():
 # ELIMINAR
 def eliminar_ventas():
     """
-    Elimina un registro de venta y reintegra las unidades al stock del inventario.
+    Elimina una venta seleccionada por ID, previa confirmación del usuario,
+    y reintegra al stock las unidades de todos sus productos.
     """
+
     print("---- ELIMINAR VENTA ----")
 
     if len(ventas) == 0:
