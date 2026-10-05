@@ -1,8 +1,8 @@
 from datetime import date
 from functools import reduce
+
 from clientes import clientes, listar_clientes
 from productos import listar_productos, productos
-
 
 ventas = [
     {
