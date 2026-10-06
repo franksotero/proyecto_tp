@@ -8,7 +8,7 @@ ventas = [
     {
         "id": 1,
         "cliente_id": 1,
-        "cliente_nombre": "Lionel Messi",
+        "cliente_nombre": "Ana Gomez",
         "fecha": (18, 9, 2026),
         "items": [
             {
@@ -37,7 +37,7 @@ ventas = [
     {
         "id": 2,
         "cliente_id": 2,
-        "cliente_nombre": "Santiago Montiel",
+        "cliente_nombre": "Luis Perez",
         "fecha": (20, 8, 2026),
         "items": [
             {
@@ -66,7 +66,7 @@ ventas = [
     {
         "id": 3,
         "cliente_id": 3,
-        "cliente_nombre": "Brian Sarmi",
+        "cliente_nombre": "Anastasia Diaz",
         "fecha": (14, 6, 2026),
         "items": [
             {
@@ -166,8 +166,13 @@ def consultar_compras_de_cliente():
     """
     Pide un ID de cliente, muestra sus datos y el listado de ventas asociadas a ese cliente.
     """
-    id_buscar = int(input("\nIngrese el ID del cliente a consultar: "))
-    cliente = buscar_cliente_por_id(id_buscar)
+    try:
+        id_buscar = int(input("\nIngrese el ID del cliente a consultar: "))
+        cliente = buscar_cliente_por_id(id_buscar)
+    except ValueError:
+        print("\033[31mID inválido. Debe ser un número entero.\033[0m")
+        return
+
     if cliente is None:
         print("\033[31mCliente no encontrado.\033[0m")
         return
@@ -240,8 +245,12 @@ def registrar_ventas():
     print("---- REGISTRAR VENTA ----")
     listar_clientes()
 
-    cliente_id = int(input("\nIngrese ID del cliente: "))
-    cliente = buscar_cliente_por_id(cliente_id)
+    try:
+        cliente_id = int(input("\nIngrese ID del cliente: "))
+        cliente = buscar_cliente_por_id(cliente_id)
+    except ValueError:
+        print("\033[31mID inválido. Debe ser un número entero.\033[0m")
+        return
 
     if cliente is None:
         print("\033[31mCliente no encontrado. Operación cancelada.\033[0m")
@@ -252,7 +261,12 @@ def registrar_ventas():
     print("\n\033[1;33;44m---- LISTA DE PRODUCTOS ----\033[0m")
     listar_productos(productos)
 
-    producto_id = int(input("\nIngrese ID del producto (0 para finalizar): "))
+    try:
+        producto_id = int(input("\nIngrese ID del producto (0 para finalizar): "))
+    except ValueError:
+        print("\033[31mID inválido. Debe ser un número entero.\033[0m")
+        return
+
     while producto_id != 0:
         producto = buscar_producto_por_id(producto_id)
         if producto is None:
@@ -298,7 +312,12 @@ def registrar_ventas():
 
         print("\n\033[1;33;44m---- LISTA DE PRODUCTOS ----\033[0m")
         listar_productos(productos)
-        producto_id = int(input("\nIngrese ID del producto (0 para finalizar): "))
+
+        try:
+            producto_id = int(input("\nIngrese ID del producto (0 para finalizar): "))
+        except ValueError:
+            print("\033[31mID inválido. Debe ser un número entero.\033[0m")
+            return
 
     if len(una_venta) == 0:
         print("\033[31mNo se registró ningún producto. Venta cancelada.\033[0m")
@@ -327,9 +346,16 @@ def listar_ventas():
 
     mostrar_ventas()
 
-    venta_id = int(
-        input("\nIngrese el ID de la venta para ver detalles o presione 0 para salir: ")
-    )
+    try:
+        venta_id = int(
+            input(
+                "\nIngrese el ID de la venta para ver detalles o presione 0 para salir: "
+            )
+        )
+    except ValueError:
+        print("\033[31mID inválido. Debe ser un número entero.\033[0m")
+        return
+
     if venta_id == 0:
         return
 
@@ -349,7 +375,12 @@ def actualizar_ventas():
     print("---- ACTUALIZAR VENTAS ----")
     mostrar_ventas()
 
-    venta_id = int(input("\nIngrese el ID de la venta a actualizar: "))
+    try:
+        venta_id = int(input("\nIngrese el ID de la venta a actualizar: "))
+    except ValueError:
+        print("\033[31mID inválido. Debe ser un número entero.\033[0m")
+        return
+
     venta = buscar_venta_por_id(venta_id)
 
     if venta is None:
@@ -358,7 +389,11 @@ def actualizar_ventas():
 
     mostrar_detalles_venta(venta)
 
-    producto_id = int(input("\nIngrese el ID del producto a actualizar: "))
+    try:
+        producto_id = int(input("\nIngrese el ID del producto a actualizar: "))
+    except ValueError:
+        print("\033[31mID inválido. Debe ser un número entero.\033[0m")
+        return
     # buscamos el item que coincida con el ID del producto
     item_encontrado = [
         item for item in venta["items"] if item["producto_id"] == producto_id
@@ -373,6 +408,7 @@ def actualizar_ventas():
     producto = buscar_producto_por_id(producto_id)
     cantidad_anterior = item["cantidad"]
     producto[4] += cantidad_anterior
+    print(f"Se han reintegrado {cantidad_anterior} unidades de {producto[1]} al stock.")
 
     nueva_cantidad = int(
         input(
@@ -437,7 +473,12 @@ def eliminar_ventas():
             f"{len(venta['items']):<5} | ${venta['total']:<10}"
         )
 
-    venta_id = int(input("\nIngrese el ID de la venta a eliminar (0 para salir): "))
+    try:
+        venta_id = int(input("\nIngrese el ID de la venta a eliminar (0 para salir): "))
+    except ValueError:
+        print("\033[31mID inválido. Debe ser un número entero.\033[0m")
+        return
+
     if venta_id == 0:
         return
 
