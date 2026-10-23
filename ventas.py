@@ -2,7 +2,7 @@ from datetime import date
 from functools import reduce
 
 from clientes import clientes, listar_clientes
-from productos import listar_productos, productos
+from productos import (NOMBRE_ARCHIVO,guardar_productos_en_archivo,listar_productos,productos,)
 
 ventas = [
     {
@@ -106,17 +106,18 @@ def menu_ventas(rol):
         opcion = input("Elija una opcion: ")
         if opcion == "1":
             registrar_ventas()
+            guardar_productos_en_archivo(NOMBRE_ARCHIVO, productos) 
         elif opcion == "2":
             listar_ventas()
         elif opcion == "3":
             actualizar_ventas()
+            guardar_productos_en_archivo(NOMBRE_ARCHIVO, productos)
         elif opcion == "4":
             if rol == "admin":
                 eliminar_ventas()
+                guardar_productos_en_archivo(NOMBRE_ARCHIVO, productos)
             else:
-                print(
-                    "\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden eliminar una venta.\033[0m"
-                )
+                print("\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden eliminar una venta.\033[0m")
         elif opcion == "5":
             consultar_compras_de_cliente()
         elif opcion == "6":

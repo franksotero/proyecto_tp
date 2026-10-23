@@ -1,29 +1,60 @@
 """
-Módulo para la gestion del inventario de productos.
+Módulo para la gestión del inventario de productos.
 Muestra las operaciones CRUD para los productos, control de stock,
-validación de categorías y ordenamiento de datos.
+validación de categorías y ordenamiento de datos mediante un archivo de texto
 """
+NOMBRE_ARCHIVO = "productos.txt"
+
+def cargar_productos_desde_archivo(ruta):
+    """
+    Lee un archivo de texto con codificación UTF-8 usando try-except y la sentencia with.
+    Procesa cada línea separada por comas y retorna la lista de productos en memoria.
+    """
+    lista_productos = []
+
+    try:
+        with open(ruta, "r", encoding="utf-8") as arch:
+            for linea in arch:
+                linea = linea.strip()
+                if linea:
+                    campos = linea.split(",")
+                    id_prod = int(campos[0])
+                    nombre = campos[1]
+                    categoria = campos[2]
+                    precio = float(campos[3])
+                    stock = int(campos[4])
+                    descuento = float(campos[5])
+                    lista_productos.append([id_prod, nombre, categoria, precio, stock, descuento])
+    except FileNotFoundError:
+        # Si el archivo aún no fue creado, inicializa una lista vacía
+        print(f"Aviso: El archivo '{ruta}' no existe todavía. Se creara un nuevo archivo.")
+    except OSError as err:
+        print(f"Error al intentar leer el archivo '{ruta}': {err}")
+    return lista_productos
+
+def guardar_productos_en_archivo(ruta, lista_productos):
+    """
+    Escribe la matriz de productos en el archivo de texto en formato delimitado por comas.
+    Usa la sentencia with para garantizar el cierre adecuado del recurso.
+    """
+    try:
+        with open(ruta, "w", encoding="utf-8") as arch:
+            for p in lista_productos:
+                linea = f"{p[0]},{p[1]},{p[2]},{p[3]},{p[4]},{p[5]}\n"
+                arch.write(linea)
+    except OSError as err:
+        print(f"Error al intentar escribir en el archivo '{ruta}': {err}")
+
+# Carga inicial del archivo de texto
+productos = cargar_productos_desde_archivo(NOMBRE_ARCHIVO)
 
 # PRODUCTOS: ID, NOMBRE, CATEGORIA, PRECIO, STOCK, DESCUENTO
-productos = [
-    [1, "Pan lactal", "almacen", 1200.0, 50, 0.0],
-    [2, "Detergente", "limpieza", 2500.0, 30, 0.10],
-    [3, "Gaseosa Cola 2L", "bebidas", 1800.0, 45, 0.05],
-    [4, "Chocolate ", "golosinas", 950.0, 100, 0.0],
-    [5, "Shampoo", "Higiene", 3000.0, 7, 0.15],
-    [6, "Arroz", "almacen", 1500.0, 8, 0.0],
-    [7, "Galletitas ", "almacen", 1500.0, 5, 0.05],
-    [8, "Papas fritas ", "snacks", 2800.0, 25, 0.10],
-    [9, "Jabon ", "higiene", 1200.0, 60, 0.0],
-    [10, "Aceite ", "almacen", 400.0, 18, 0.15],
-]
-
 
 # CREATE PRODUCTO
 def crear_producto():
     """Registra un nuevo producto en el catalogo.
     Solicita y valida el nombre, categoria, precio, stock y descuento,
-    generando un ID de forma automática, segun la cantidad previa de productos.
+    generando un ID de forma automatica, segun la cantidad previa de productos.
     """
     print("\n\033[4;35m--- AGREGAR PRODUCTO ---\033[0m")
     if len(productos) > 0:
@@ -46,8 +77,8 @@ def crear_producto():
 
     nueva_fila = [nuevo_id, nombre, categoria, precio, stock, descuento]
     productos.append(nueva_fila)
+    guardar_productos_en_archivo(NOMBRE_ARCHIVO, productos)
     print(f"\n\033[32m¡Producto agregado con éxito! Se le asignó el ID: {nuevo_id}\033[0m")
-
 
 def obtener_categorias_unicas():
     categorias = set(p[2].lower() for p in productos)
@@ -86,28 +117,96 @@ def listar_productos(lista):
 
 
 # UPDATE PRODUCTO
-def actualizar_stock():
-    """
-    Permite consultar productos con bajo stock y modificar las existencias de un producto.
-    """
-    print("1. Para ver productos con bajo stock")
-    print("2. Para actualizar stock")
-    opcion = input("Elige una opción (1-2): ")
-    if opcion == "1":
-        mostrar_productos_poco_stock()
-    elif opcion == "2":
-        listar_productos(productos)
-        id_buscar = int(input("\nIngresa el ID del producto para cambiar su stock: "))
-        encontrado = False
-        for fila in productos:
-            if fila[0] == id_buscar:
-                nuevo_stock = int(input(f"El stock actual de {fila[1]} es {fila[4]}. Nuevo stock: "))
-                fila[4] = nuevo_stock
-                print("\033[32m¡Stock actualizado!\033[0m")
-                encontrado = True
-        if encontrado == False:
-            print("\033[31mProducto no encontrado.\033[0m")
 
+def actualizar_producto(rol):
+    """
+    Permite modificar los datos de un producto (nombre, categoria, precio, stock o descuento).
+    Solo administradores pueden realizar modificaciones.
+    """
+    if rol != "admin":
+        print("\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden editar productos.\033[0m")
+    else:
+        listar_productos(productos)
+        try:
+            id_buscar = int(input("\nIngresa el ID del producto a modificar: "))
+        except ValueError:
+            print("\033[31mError. El ID debe ser un numero entero.\033[0m")
+            return
+
+        producto = None
+        i = 0
+        while i < len(productos) and producto is None:
+            if productos[i][0] == id_buscar:
+                producto = productos[i]
+            i += 1
+
+        if producto is None:
+            print("\033[31mProducto no encontrado.\033[0m")
+        else:
+            opcion = ""
+            while opcion != "6":
+                print(f"\n---- MODIFICANDO: {producto[1]} (ID: {producto[0]}) ----")
+                print("1. Modificar nombre")
+                print("2. Modificar categoria")
+                print("3. Modificar precio")
+                print("4. Modificar stock")
+                print("5. Modificar descuento")
+                print("6. Volver al menu de productos")
+
+                opcion = input("Elige una opción (1-6): ")
+
+                if opcion == "1":
+                    nuevo_nombre = input("Ingrese el nuevo nombre: ").strip()
+                    if len(nuevo_nombre) > 0:
+                        producto[1] = nuevo_nombre
+                        guardar_productos_en_archivo(NOMBRE_ARCHIVO, productos)
+                        print("\033[32m¡Nombre actualizado con exito!\033[0m")
+                    else:
+                        print("\033[31mEl nombre no puede estar vacío.\033[0m")
+
+                elif opcion == "2":
+                    nueva_categoria = validar_categoria()
+                    producto[2] = nueva_categoria
+                    guardar_productos_en_archivo(NOMBRE_ARCHIVO, productos)
+                    print("\033[32m¡Categoria actualizada con exito!\033[0m")
+
+                elif opcion == "3":
+                    try:
+                        nuevo_precio = float(input("Ingrese el nuevo precio: "))
+                        while nuevo_precio <= 0:
+                            nuevo_precio = float(input("\033[37;41mEl precio debe ser mayor a 0: \033[0m"))
+                        producto[3] = nuevo_precio
+                        guardar_productos_en_archivo(NOMBRE_ARCHIVO, productos)
+                        print("\033[32m¡Precio actualizado con éxito!\033[0m")
+                    except ValueError:
+                        print("\033[31mError. Debe ingresar un valor numerico valido.\033[0m")
+
+                elif opcion == "4":
+                    try:
+                        nuevo_stock = int(input(f"Stock actual de {producto[1]}: {producto[4]}. Nuevo stock: "))
+                        while nuevo_stock < 0:
+                            nuevo_stock = int(input("\033[37;41mEl stock no puede ser negativo, ingrese el nuevo stock: \033[0m"))
+                        producto[4] = nuevo_stock
+                        guardar_productos_en_archivo(NOMBRE_ARCHIVO, productos)
+                        print("\033[32m¡Stock actualizado con exito!\033[0m")
+                    except ValueError:
+                        print("\033[31mError. Debe ingresar un numero entero valido.\033[0m")
+
+                elif opcion == "5":
+                    try:
+                        nuevo_desc = float(input("Ingrese el nuevo descuento (ej: 0.10 para 10%): "))
+                        while nuevo_desc < 0 or nuevo_desc > 1:
+                            nuevo_desc = float(input("\033[37;41mEl descuento debe estar entre 0 y 1: \033[0m"))
+                        producto[5] = nuevo_desc
+                        guardar_productos_en_archivo(NOMBRE_ARCHIVO, productos)
+                        print("\033[32m¡Descuento actualizado con exito!\033[0m")
+                    except ValueError:
+                        print("\033[31mError. Debe ingresar un numero valido.\033[0m")
+
+                elif opcion == "6":
+                    print("Regresando al menu de productos...")
+                else:
+                    print("\033[31mOpcion no valida. Intente de nuevo.\033[0m")
 
 # DELETE PRODUCTO
 def eliminar_producto(rol):
@@ -122,12 +221,12 @@ def eliminar_producto(rol):
     while i < len(productos) and not encontrado:
         if productos[i][0] == id_buscar:
             productos.pop(i)
+            guardar_productos_en_archivo(NOMBRE_ARCHIVO, productos)
             print("\033[32m¡Producto eliminado!\033[0m")
             encontrado = True
         i += 1
     if not encontrado:
         print("\033[31mProducto no encontrado.\033[0m")
-
 
 def mostrar_productos_poco_stock():
     """
@@ -192,43 +291,44 @@ def menu_reportes():
 # MENÚ PRODUCTOS
 def menu_productos(rol):
     opcion = ""
-    while opcion != "6":
+    while opcion != "7":
         print("\n==================================")
         print("\033[1;34m       GESTIÓN DE PRODUCTOS       \033[0m")
         print("==================================")
         print("1. Agregar producto")
         print("2. Ver productos")
-        print("3. Actualizar stock")
-        print("4. Eliminar producto")
-        print("5. Reportes y ordenamiento")
-        print("6. Salir al menú principal")
+        print("3. Ver productos con bajo stock")
+        print("4. Modificar producto")
+        print("5. Eliminar producto")
+        print("6. Reportes y ordenamiento")
+        print("7. Salir al menu principal")
 
-        opcion = input("Elige una opción (1-6): ")
+        opcion = input("Elige una opcion (1-7): ")
         if opcion == "1":
             if rol == "admin":
                 crear_producto()
             else:
                 print(
-                    "\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden agregar un producto.\033[m"
+                    "\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden agregar un producto.\033[0m"
                 )
             input("\nPresiona Enter para continuar...")
         elif opcion == "2":
             listar_productos(productos)
             input("\nPresiona Enter para continuar...")
         elif opcion == "3":
-            actualizar_stock()
+            mostrar_productos_poco_stock()
             input("\nPresiona Enter para continuar...")
         elif opcion == "4":
+            actualizar_producto(rol)
+        elif opcion == "5":
             if rol == "admin":
                 eliminar_producto(rol)
             else:
-                print(
-                    "\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden eliminar un producto.\033[0m"
-                )
+                print("\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden eliminar un producto.\033[0m")
             input("\nPresiona Enter para continuar...")
-        elif opcion == "5":
-            menu_reportes()
         elif opcion == "6":
+            menu_reportes()
+        elif opcion == "7":
             print("\nRegresando al menú principal...")
         else:
-            print("\n\033[31mOpción no válida. Intenta de nuevo.\033[/m")
+            print("\n\033[31mOpción no válida. Intenta de nuevo.\033[0m")
