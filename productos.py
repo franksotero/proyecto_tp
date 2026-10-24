@@ -240,6 +240,18 @@ def mostrar_productos_poco_stock():
         for p in productos_criticos:
             print(f"ID: {p[0]} | Producto: {p[1]} | Stock actual: {p[4]}")
 
+def calcular_stock_total_recursivo(lista, i=0):
+    """
+    Suma de forma recursiva el stock disponible de todos los productosdel supermercado
+    -Caso base: cuando el indice "i" llega al final de la lista (retorna 0).
+    -Caso recursivo: suma el stock del producto actual + llamada recursiva con i + 1.
+    -Reduccion del dominio: incrementa "i" en 1 en cada llamada.
+    """
+    if i == len(lista):
+        return 0
+    else:
+        return lista[i][4] + calcular_stock_total_recursivo(lista, i + 1)
+
 
 # ORDENAR
 def ordenar_categoria_prod():
@@ -262,16 +274,17 @@ def ordenar_precio_prod():
 
 def menu_reportes():
     opcion = ""
-    while opcion != "4":
+    while opcion != "5":
         print("\n==================================")
         print("\033[1;34m      REPORTES Y ORDENAMIENTO     \033[0m")
         print("==================================")
         print("1. Ordenar por categoría")
         print("2. Ordenar por precio (menor a mayor)")
         print("3. Ver categorías únicas")
-        print("4. Volver al menú de productos")
+        print("4. Ver unidades totales en stock")
+        print("5. Volver al menú de productos")
 
-        opcion = input("Elige una opción (1-4): ")
+        opcion = input("Elige una opción (1-5): ")
 
         if opcion == "1":
             ordenar_categoria_prod()
@@ -283,9 +296,13 @@ def menu_reportes():
             obtener_categorias_unicas()
             input("\nPresiona Enter para continuar...")
         elif opcion == "4":
+            total_unidades = calcular_stock_total_recursivo(productos)
+            print(f"\n\033[32mEl stock total sumado de la tienda es: {total_unidades} unidades.\033[0m")
+            input("\nPresiona Enter para continuar...")
+        elif opcion == "5":
             print("\nRegresando...")
         else:
-            print("\n\033[31mOpción no válida. Intenta de nuevo.\033[31m")
+            print("\n\033[31mOpción no válida. Intenta de nuevo.\033[0m")
 
 
 # MENÚ PRODUCTOS
