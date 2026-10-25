@@ -1,0 +1,5 @@
+admin,1234,admin
+ivarguello,5678,empleado
+tobellora,1122,empleado
+dalazo,1212,empleado
+frsotero,bocajrs,empleado
