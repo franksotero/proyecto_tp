@@ -1,7 +1,7 @@
 from clientes import clientes, menu_clientes
 from estadisticas import menu_estadisticas
 from productos import menu_productos
-from usuarios import iniciar_sesion, registrar_usuario
+from usuarios import iniciar_sesion, menu_usuarios, registrar_usuario
 from ventas import menu_ventas, ventas
 
 
@@ -34,7 +34,7 @@ def menu_principal(rol):
     El rol del usuario autenticado puede ser 'admin' o 'empleado'
     """
     opcion = ""
-    while opcion != "5":
+    while opcion != "6":
         print("\n======================================")
         print(f"  SISTEMA DE GESTIÓN DEL SUPERMERCADO ({rol.upper()})  ")
         print("======================================")
@@ -42,7 +42,8 @@ def menu_principal(rol):
         print("2. Módulo de Clientes")
         print("3. Módulo de Ventas")
         print("4. Módulo de Estadisticas")
-        print("5. Cerrar Sesión")
+        print("5. Módulo de Usuarios")
+        print("6. Cerrar sesion")
         opcion = input("Seleccione una opción: ")
         if opcion == "1":
             menu_productos(rol)
@@ -53,6 +54,8 @@ def menu_principal(rol):
         elif opcion == "4":
             menu_estadisticas(ventas, clientes, rol)
         elif opcion == "5":
+            menu_usuarios(rol)
+        elif opcion == "6":
             print("\n¡Gracias por usar el sistema!")
         else:
             print("Opción no válida.")
