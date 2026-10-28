@@ -14,3 +14,9 @@ def test_buscar_usuario_recursivo_existente():
     
     posicion = buscar_usuario_recursivo(lista_prueba, "admin")
     assert posicion == 0
+
+def test_buscar_usuario_recursivo_inexistente():
+    lista_prueba = [["admin", "1234", "admin"]]
+    
+    posicion = buscar_usuario_recursivo(lista_prueba, "usuario_falso")
+    assert posicion == -1
