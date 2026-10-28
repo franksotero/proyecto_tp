@@ -36,3 +36,7 @@ def test_buscar_producto_por_id_existente():
     producto = buscar_producto_por_id(1)
     assert producto is not None
     assert producto[0] == 1
+
+def test_buscar_producto_por_id_inexistente():
+    producto = buscar_producto_por_id(99999)
+    assert producto is None
