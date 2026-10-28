@@ -26,3 +26,7 @@ def test_calcular_stock_total_recursivo_con_datos():
     ]
     total = calcular_stock_total_recursivo(matriz_productos_prueba)
     assert total == 100
+
+def test_calcular_stock_total_recursivo_lista_vacia():
+    total = calcular_stock_total_recursivo([])
+    assert total == 0
