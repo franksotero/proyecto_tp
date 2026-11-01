@@ -1,89 +1,41 @@
+import json
 from datetime import date
 from functools import reduce
 
 from clientes import clientes, listar_clientes
-from productos import (NOMBRE_ARCHIVO,guardar_productos_en_archivo,listar_productos,productos,)
+from productos import NOMBRE_ARCHIVO, guardar_productos_en_archivo, listar_productos, productos
 
-ventas = [
-    {
-        "id": 1,
-        "cliente_id": 1,
-        "cliente_nombre": "Ana Gomez",
-        "fecha": (18, 9, 2026),
-        "items": [
-            {
-                "producto_id": 1,
-                "nombre": "Pan lactal",
-                "categoria": "almacen",
-                "cantidad": 2,
-                "precio_unitario": 1200.0,
-                "descuento": 0.0,
-                "subtotal": 2400.0,
-                "precio_final": 2400.0,
-            },
-            {
-                "producto_id": 2,
-                "nombre": "Detergente",
-                "categoria": "limpieza",
-                "cantidad": 1,
-                "precio_unitario": 2500.0,
-                "descuento": 0.10,
-                "subtotal": 2500.0,
-                "precio_final": 2250.0,
-            },
-        ],
-        "total": 4650.0,
-    },
-    {
-        "id": 2,
-        "cliente_id": 2,
-        "cliente_nombre": "Luis Perez",
-        "fecha": (20, 8, 2026),
-        "items": [
-            {
-                "producto_id": 6,
-                "nombre": "Arroz",
-                "categoria": "almacen",
-                "cantidad": 5,
-                "precio_unitario": 1500.0,
-                "descuento": 0.0,
-                "subtotal": 7500.0,
-                "precio_final": 7500.0,
-            },
-            {
-                "producto_id": 10,
-                "nombre": "Aceite",
-                "categoria": "almacen",
-                "cantidad": 10,
-                "precio_unitario": 400.0,
-                "descuento": 0.15,
-                "subtotal": 4000.0,
-                "precio_final": 3400.0,
-            },
-        ],
-        "total": 10900.0,
-    },
-    {
-        "id": 3,
-        "cliente_id": 3,
-        "cliente_nombre": "Anastasia Diaz",
-        "fecha": (14, 6, 2026),
-        "items": [
-            {
-                "producto_id": 4,
-                "nombre": "Chocolate",
-                "categoria": "golosinas",
-                "cantidad": 3,
-                "precio_unitario": 950.0,
-                "descuento": 0.0,
-                "subtotal": 2850.0,
-                "precio_final": 2850.0,
-            }
-        ],
-        "total": 2850.0,
-    },
-]
+NOMBRE_ARCHIVO_VENTAS = "ventas.json"
 
+def cargar_ventas_desde_archivo(ruta):
+    """
+    Lee el archivo JSON de ventas y retorna la lista en memoria.
+    Manejada con excepciones try-except y la sentencia with.
+    """
+    try:
+        with open(ruta, "r", encoding="utf-8") as arch:
+            lista_ventas = json.load(arch)
+            for v in lista_ventas:
+                v["fecha"] = tuple(v["fecha"])
+            return lista_ventas
+    except FileNotFoundError:
+        print(f"Aviso: El archivo '{ruta}' no existe. Se creará al guardar la primera venta.")
+        return []
+    except OSError as err:
+        print(f"Error al leer el archivo de ventas '{ruta}': {err}")
+        return []
+
+def guardar_ventas_en_archivo(ruta, lista_ventas):
+    """
+    Guarda la lista de ventas en el archivo JSON formateado.
+    """
+    try:
+        with open(ruta, "w", encoding="utf-8") as arch:
+            json.dump(lista_ventas, arch, indent=4, ensure_ascii=False)
+    except OSError as err:
+        print(f"Error al escribir en el archivo de ventas '{ruta}': {err}")
+
+ventas = cargar_ventas_desde_archivo(NOMBRE_ARCHIVO_VENTAS)
 
 def menu_ventas(rol):
     """
@@ -337,6 +289,8 @@ def registrar_ventas():
     ventas.append(diccionario_venta)
     print("\033[32m\nVenta registrada correctamente.\033[0m")
     print(f"Total de la venta: ${diccionario_venta['total']}")
+    guardar_ventas_en_archivo(NOMBRE_ARCHIVO_VENTAS, ventas)
+    guardar_productos_en_archivo(NOMBRE_ARCHIVO, productos)
 
 
 # LEER
@@ -451,6 +405,8 @@ def actualizar_ventas():
 
     print("\033[32mVenta actualizada correctamente.\033[0m")
     print(f"Nuevo total de la venta: ${venta['total']}")
+    guardar_ventas_en_archivo(NOMBRE_ARCHIVO_VENTAS, ventas)
+    guardar_productos_en_archivo(NOMBRE_ARCHIVO, productos)
 
 
 # ELIMINAR
@@ -500,3 +456,5 @@ def eliminar_ventas():
 
     ventas.remove(venta)
     print("\033[32mVenta eliminada y stock restaurado correctamente.\033[0m")
+    guardar_ventas_en_archivo(NOMBRE_ARCHIVO_VENTAS, ventas)
+    guardar_productos_en_archivo(NOMBRE_ARCHIVO, productos)
