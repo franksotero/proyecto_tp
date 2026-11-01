@@ -40,7 +40,7 @@ usuarios = cargar_usuarios_desde_archivo(NOMBRE_ARCHIVO_USUARIOS)
 
 def generar_usuario():
     """
-    Genera un nombre de usuario en minúsculas combinando las primeras 2 iniciales del nombre y el apellido.
+    Genera un nombre de usuario en minusculas combinando las primeras 2 iniciales del nombre y el apellido.
     """
     nombre = input("Ingrese su nombre: ")
     apellido = input("Ingrese su apellido: ")
