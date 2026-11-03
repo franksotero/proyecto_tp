@@ -1,3 +1,4 @@
+import json
 import re
 
 """
@@ -5,41 +6,48 @@ Módulo para la gestión de clientes.
 Muestra las operaciones CRUD de los clientes,
 aplicando restricciones segun el rol del usuario ingresado.
 """
+NOMBRE_ARCHIVO_CLIENTES = "clientes.json"
 
-# Crea una lista de diccionarios clientes con datos de ejemplo para pruebas
-clientes = [
-    {
-        "id": 1,
-        "nombre": "Ana Gomez",
-        "tipo_cliente": "frecuente",
-        "telefono": "1122334455",
-    },
-    {
-        "id": 2,
-        "nombre": "Luis Perez",
-        "tipo_cliente": "mayorista",
-        "telefono": "1199887766",
-    },
-    {
-        "id": 3,
-        "nombre": "Anastasia Diaz",
-        "tipo_cliente": "frecuente",
-        "telefono": "1144556677",
-    },
-    {
-        "id": 4,
-        "nombre": "Martin Lopez",
-        "tipo_cliente": "frecuente",
-        "telefono": "1133221100",
-    },
-    {
-        "id": 5,
-        "nombre": "Sofia Ruiz",
-        "tipo_cliente": "mayorista",
-        "telefono": "1166778899",
-    },
-]
+def procesar_clientes_recursivo(lista_raw, i=0):
+    """
+    Procesa recursivamente la lista de clientes
+    - Caso Base: i == len(lista_raw) -> Retorna lista vacia.
+    - Caso Recursivo: Procesa el cliente actual en "i" y llama a la función con "i + 1".
+    - Reduccion del dominio: Incrementa "i" hasta el final de la lista.
+    """
+    if i == len(lista_raw):
+        return []
+    
+    cliente_actual = lista_raw[i]
+    return [cliente_actual] + procesar_clientes_recursivo(lista_raw, i + 1)
 
+def cargar_clientes_desde_archivo(ruta):
+    """
+    Lee el archivo JSON de clientes con manejo de excepciones try-except y la sentencia with.
+    Utiliza una funcion recursiva.
+    """
+    try:
+        with open(ruta, "r", encoding="utf-8") as arch:
+            datos_raw = json.load(arch)
+            return procesar_clientes_recursivo(datos_raw)
+    except FileNotFoundError:
+        print(f"Aviso: El archivo '{ruta}' no existe. Se creará al guardar datos.")
+        return []
+    except OSError as err:
+        print(f"Error al leer '{ruta}': {err}")
+        return []
+
+def guardar_clientes_en_archivo(ruta, lista_clientes):
+    """
+    Guarda la lista de clientes sobreescribiendo el archivo JSON
+    """
+    try:
+        with open(ruta, "w", encoding="utf-8") as arch:
+            json.dump(lista_clientes, arch, indent=4, ensure_ascii=False)
+    except OSError as err:
+        print(f"Error al escribir en '{ruta}': {err}")
+
+clientes = cargar_clientes_desde_archivo(NOMBRE_ARCHIVO_CLIENTES)
 
 def menu_clientes(rol):
     opcion = ""
@@ -79,26 +87,38 @@ def menu_clientes(rol):
 # LEER
 def listar_clientes():
     """
-    Muestra la lista de clientes registrados.
+    Muestra la lista de clientes registrados imprimiendo el encabezado y llamando a la función recursiva.
     """
-
     print("\n---- LISTA DE CLIENTES ----")
     print(f"{'ID':<3} | {'NOMBRE Y APELLIDO':<18} | {'TIPO':<10} | {'TELÉFONO':<11}")
     print("-" * 55)
-    for cliente in clientes:
-        print(
-            f"{cliente['id']:<3} | {cliente['nombre']:<18} | {cliente['tipo_cliente']:<10} | {cliente['telefono']:<11}"
-        )
-
+    if len(clientes) == 0:
+        print("No hay clientes registrados.")
+    else:
+        mostrar_clientes_recursivo(clientes)
+    print("-" * 55)
 
 def mostrar_cliente(titulo, cliente):
+    """
+    Muestra los datos de un unico cliente puntual.
+    """
     print(f"\n---- {titulo} ----")
     print(f"{'ID':<3} | {'NOMBRE Y APELLIDO':<18} | {'TIPO':<10} | {'TELÉFONO':<11}")
     print("-" * 55)
-    print(
-        f"{cliente['id']:<3} | {cliente['nombre']:<18} | {cliente['tipo_cliente']:<10} | {cliente['telefono']:<11}"
-    )
-
+    print(f"{cliente['id']:<3} | {cliente['nombre']:<18} | {cliente['tipo_cliente']:<10} | {cliente['telefono']:<11}")
+    
+def mostrar_clientes_recursivo(lista):
+    """
+    Imprime los clientes de forma recursiva utilizando slicing.
+    - Caso base: len(lista) == 0.
+    - Caso recursivo: Muestra el primer cliente (lista[0]) y llama a la función con el resto de la lista.
+    """
+    if len(lista) > 0:
+        cliente = lista[0]
+        print(
+            f"{cliente['id']:<3} | {cliente['nombre']:<18} | {cliente['tipo_cliente']:<10} | {cliente['telefono']:<11}"
+        )
+        mostrar_clientes_recursivo(lista[1:])
 
 def validar_nombre():
     """Solicita y valida, con una expresión regular, que se ingresen nombre
@@ -167,6 +187,7 @@ def crear_cliente():
         "telefono": telefono,
     }
     clientes.append(nuevo_cliente)
+    guardar_clientes_en_archivo(NOMBRE_ARCHIVO_CLIENTES, clientes)
     print("\033[32m¡Cliente creado con éxito!\033[0m")
 
 
@@ -198,21 +219,20 @@ def actualizar_cliente(rol):
                     nuevo_nombre = validar_nombre()
                     cliente["nombre"] = nuevo_nombre
                     print("\033[32mNombre y apellido actualizado correctamente.\033[0m")
+                    guardar_clientes_en_archivo(NOMBRE_ARCHIVO_CLIENTES, clientes)
                 elif opcion == 2:
                     nuevo_tipo_cliente = validar_tipo_cliente()
                     cliente["tipo_cliente"] = nuevo_tipo_cliente
                     print("\033[32mTipo de cliente actualizado correctamente.\033[0m")
+                    guardar_clientes_en_archivo(NOMBRE_ARCHIVO_CLIENTES, clientes)
                 elif opcion == 3:
                     if rol == "admin":
                         nuevo_telefono = validar_telefono()
                         cliente["telefono"] = nuevo_telefono
-                        print(
-                            "\033[32mNúmero de teléfono actualizado correctamente.\033[0m"
-                        )
+                        print("\033[32mNúmero de teléfono actualizado correctamente.\033[0m")
+                        guardar_clientes_en_archivo(NOMBRE_ARCHIVO_CLIENTES, clientes)
                     else:
-                        print(
-                            "\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden modificar el teléfono.\033[0m"
-                        )
+                        print("\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden modificar el teléfono.\033[0m")
                 elif opcion == 4:
                     print("Volviendo al gestión de clientes...")
                 else:
@@ -234,6 +254,7 @@ def eliminar_cliente(rol):
             opcion = input("¿Estas seguro? (si/no): ").lower()
             if opcion == "si":
                 clientes.remove(cliente)
+                guardar_clientes_en_archivo(NOMBRE_ARCHIVO_CLIENTES, clientes)  # <--- Guardar en JSON
                 print("\033[32m¡Cliente eliminado con éxito!\033[0m")
             else:
                 print("\033[31mOperación cancelada.\033[0m")

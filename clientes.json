@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "nombre": "Ana Gomez",
+        "tipo_cliente": "frecuente",
+        "telefono": "1122334455"
+    },
+    {
+        "id": 2,
+        "nombre": "Luis Perez",
+        "tipo_cliente": "mayorista",
+        "telefono": "1199887766"
+    },
+    {
+        "id": 3,
+        "nombre": "Anastasia Diaz",
+        "tipo_cliente": "frecuente",
+        "telefono": "1144556677"
+    },
+    {
+        "id": 4,
+        "nombre": "Martin Lopez",
+        "tipo_cliente": "frecuente",
+        "telefono": "1133221100"
+    },
+    {
+        "id": 5,
+        "nombre": "Sofia Ruiz",
+        "tipo_cliente": "mayorista",
+        "telefono": "1166778899"
+    },
+    {
+        "id": 6,
+        "nombre": "Ezequiel Fernandez",
+        "tipo_cliente": "mayorista",
+        "telefono": "1178359356"
+    }
+]
