@@ -65,18 +65,21 @@ def registrar_usuario():
     print("\033[32m¡Usuario registrado con éxito como Empleado!\033[0m")
 
 def iniciar_sesion():
-    """
-    Autentica a un usuario comprobando su credenciales.
-    Return: El rol del usuario ('admin' o 'empleado') si es correcto, none si falla algo.
-    """
-    print("\n\033[4;35m--- INICIO DE SESIÓN ---\033[0m")
-    usuario_ingresado = input("Usuario: ").lower()
-    contrasena_ingresada = input("Contraseña: ")
-    for u in usuarios:
-        if u[0] == usuario_ingresado and u[1] == contrasena_ingresada:
-            print(f"\n\033[32m¡Bienvenido, {usuario_ingresado} ({u[2].upper()})!\033[0m")
-            return u[2]
-    print("\033[31mUsuario o contraseña incorrectos.\033[0m")
+    print("\n\033[4;35m--- INICIO DE SESION ---\033[0m")
+    intentos = 3
+    while intentos > 0:
+        usuario_ingresado = input("Usuario: ").lower().strip()
+        contrasena_ingresada = input("Contraseña: ")
+        for u in usuarios:
+            if u[0] == usuario_ingresado and u[1] == contrasena_ingresada:
+                print(f"\n\033[32m¡Bienvenido, {usuario_ingresado} ({u[2].upper()})!\033[0m")
+                return u[2]
+        intentos = intentos - 1
+        if intentos > 0:
+            print(f"\033[31mCredenciales incorrectas. Te quedan {intentos} intento(s).\033[0m\n")
+        else:
+            print("\033[37;41m[BLOQUEO] Ha superado el límite de 3 intentos fallidos.\033[0m")
+            input("\nPresiona Enter para volver al menú de inicio...")
     return None
 
 def eliminar_usuario(rol):

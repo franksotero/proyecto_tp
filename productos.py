@@ -240,6 +240,26 @@ def mostrar_productos_poco_stock():
         for p in productos_criticos:
             print(f"ID: {p[0]} | Producto: {p[1]} | Stock actual: {p[4]}")
 
+def buscar_producto_por_nombre():
+    """
+    Solicita un texto al usuario y muestra todos los productos
+    que su nombre contenga esa palabra clave.
+    """
+    print("\n\033[4;35m--- BÚSQUEDA DE PRODUCTOS POR NOMBRE ---\033[0m")
+    busqueda = input("Ingrese el nombre o palabra clave a buscar: ").strip().lower()
+
+    if len(busqueda) == 0:
+        print("\033[31mNo ingresaste ninguna palabra clave.\033[0m")
+        return
+
+    coincidencias = list(filter(lambda p: busqueda in p[1].lower(), productos))
+
+    if len(coincidencias) == 0:
+        print(f"\033[31mNo se encontraron productos que coincidan con '{busqueda}'.\033[0m")
+    else:
+        print(f"\n\033[32mSe encontraron {len(coincidencias)} coincidencia(s):\033[0m")
+        listar_productos(coincidencias)
+
 def calcular_stock_total_recursivo(lista, i=0):
     """
     Suma de forma recursiva el stock disponible de todos los productosdel supermercado
@@ -314,13 +334,14 @@ def menu_productos(rol):
         print("==================================")
         print("1. Agregar producto")
         print("2. Ver productos")
-        print("3. Ver productos con bajo stock")
-        print("4. Modificar producto")
-        print("5. Eliminar producto")
-        print("6. Reportes y ordenamiento")
-        print("7. Salir al menu principal")
+        print("3. Buscar producto por nombre")
+        print("4. Ver productos con bajo stock")
+        print("5. Modificar producto")
+        print("6. Eliminar producto")
+        print("7. Reportes y ordenamiento")
+        print("8. Salir al menu principal")
 
-        opcion = input("Elige una opcion (1-7): ")
+        opcion = input("Elige una opcion (1-8): ")
         if opcion == "1":
             if rol == "admin":
                 crear_producto()
@@ -333,19 +354,22 @@ def menu_productos(rol):
             listar_productos(productos)
             input("\nPresiona Enter para continuar...")
         elif opcion == "3":
-            mostrar_productos_poco_stock()
+            buscar_producto_por_nombre()
             input("\nPresiona Enter para continuar...")
         elif opcion == "4":
-            actualizar_producto(rol)
+            mostrar_productos_poco_stock()
+            input("\nPresiona Enter para continuar...")
         elif opcion == "5":
+            actualizar_producto(rol)
+        elif opcion == "6":
             if rol == "admin":
                 eliminar_producto(rol)
             else:
                 print("\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden eliminar un producto.\033[0m")
             input("\nPresiona Enter para continuar...")
-        elif opcion == "6":
-            menu_reportes()
         elif opcion == "7":
+            menu_reportes()
+        elif opcion == "8":
             print("\nRegresando al menú principal...")
         else:
             print("\n\033[31mOpción no válida. Intenta de nuevo.\033[0m")

@@ -254,7 +254,7 @@ def eliminar_cliente(rol):
             opcion = input("¿Estas seguro? (si/no): ").lower()
             if opcion == "si":
                 clientes.remove(cliente)
-                guardar_clientes_en_archivo(NOMBRE_ARCHIVO_CLIENTES, clientes)  # <--- Guardar en JSON
+                guardar_clientes_en_archivo(NOMBRE_ARCHIVO_CLIENTES, clientes)
                 print("\033[32m¡Cliente eliminado con éxito!\033[0m")
             else:
                 print("\033[31mOperación cancelada.\033[0m")

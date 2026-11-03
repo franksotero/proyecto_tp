@@ -117,5 +117,111 @@
             }
         ],
         "total": 29560.0
+    },
+    {
+        "id": 4,
+        "cliente_id": 6,
+        "cliente_nombre": "Ezequiel Fernandez",
+        "fecha": [
+            3,
+            11,
+            2026
+        ],
+        "items": [
+            {
+                "producto_id": 1,
+                "nombre": "Pan lactal",
+                "categoria": "almacen",
+                "cantidad": 4,
+                "precio_unitario": 1200.0,
+                "descuento": 0.0,
+                "subtotal": 4800.0,
+                "precio_final": 4800.0
+            },
+            {
+                "producto_id": 4,
+                "nombre": "Chocolate",
+                "categoria": "golosinas",
+                "cantidad": 12,
+                "precio_unitario": 950.0,
+                "descuento": 0.0,
+                "subtotal": 11400.0,
+                "precio_final": 11400.0
+            },
+            {
+                "producto_id": 9,
+                "nombre": "Jabon",
+                "categoria": "higiene",
+                "cantidad": 3,
+                "precio_unitario": 1200.0,
+                "descuento": 0.0,
+                "subtotal": 3600.0,
+                "precio_final": 3600.0
+            },
+            {
+                "producto_id": 13,
+                "nombre": "Alfajor",
+                "categoria": "golosinas",
+                "cantidad": 6,
+                "precio_unitario": 1200.0,
+                "descuento": 0.0,
+                "subtotal": 7200.0,
+                "precio_final": 7200.0
+            },
+            {
+                "producto_id": 3,
+                "nombre": "Gaseosa Cola 2L",
+                "categoria": "bebidas",
+                "cantidad": 2,
+                "precio_unitario": 1800.0,
+                "descuento": 0.05,
+                "subtotal": 3600.0,
+                "precio_final": 3420.0
+            }
+        ],
+        "total": 30420.0
+    },
+    {
+        "id": 5,
+        "cliente_id": 4,
+        "cliente_nombre": "Martin Lopez",
+        "fecha": [
+            3,
+            11,
+            2026
+        ],
+        "items": [
+            {
+                "producto_id": 13,
+                "nombre": "Alfajor",
+                "categoria": "golosinas",
+                "cantidad": 5,
+                "precio_unitario": 1200.0,
+                "descuento": 0.0,
+                "subtotal": 6000.0,
+                "precio_final": 6000.0
+            },
+            {
+                "producto_id": 8,
+                "nombre": "Papas fritas",
+                "categoria": "snacks",
+                "cantidad": 3,
+                "precio_unitario": 2800.0,
+                "descuento": 0.1,
+                "subtotal": 8400.0,
+                "precio_final": 7560.0
+            },
+            {
+                "producto_id": 3,
+                "nombre": "Gaseosa Cola 2L",
+                "categoria": "bebidas",
+                "cantidad": 4,
+                "precio_unitario": 1800.0,
+                "descuento": 0.05,
+                "subtotal": 7200.0,
+                "precio_final": 6840.0
+            }
+        ],
+        "total": 20400.0
     }
 ]

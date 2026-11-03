@@ -156,12 +156,12 @@ def mostrar_ventas():
 
     print("\n\033[1;33;44m---- LISTA DE VENTAS ----\033[0m")
     print(
-        f"{'ID VENTA':<8} | {'ID CLIENTE':<10} | {'NOMBRE Y APELLIDO':<17} | {'ITEMS':<5} | {'UNIDADES':<8} | {'TOTAL':<10}"
+        f"{'ID VENTA':<8} | {'ID CLIENTE':<10} | {'NOMBRE Y APELLIDO':<20} | {'ITEMS':<5} | {'UNIDADES':<8} | {'TOTAL':<10}"
     )
-    print("-" * 70)
+    print("-" * 75)
     for venta in ventas:
         print(
-            f"{venta['id']:<8} | {venta['cliente_id']:<10} | {venta['cliente_nombre']:<17} | {len(venta['items']):<5} | {sum(item['cantidad'] for item in venta['items']):<8} | ${venta['total']:<10}"
+            f"{venta['id']:<8} | {venta['cliente_id']:<10} | {venta['cliente_nombre']:<20} | {len(venta['items']):<5} | {sum(item['cantidad'] for item in venta['items']):<8} | ${venta['total']:<10}"
         )
 
     total_facturado = reduce(
