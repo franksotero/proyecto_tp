@@ -55,3 +55,8 @@ def test_buscar_producto_por_id_recursivo_existente():
     resultado = buscar_producto_por_id_recursivo(matriz_prueba, 2)
     assert resultado is not None
     assert resultado[1] == "Detergente"
+
+def test_buscar_producto_por_id_recursivo_inexistente():
+    matriz_prueba = [[1, "Pan lactal", "almacen", 1200.0, 40, 0.0]]
+    resultado = buscar_producto_por_id_recursivo(matriz_prueba, 99)
+    assert resultado is None
