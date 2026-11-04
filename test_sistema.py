@@ -1,8 +1,10 @@
 from usuarios import buscar_usuario_recursivo
 from productos import calcular_stock_total_recursivo
-from ventas import buscar_producto_por_id, buscar_venta_por_id
-
-
+from ventas import (
+    buscar_cliente_por_id_recursivo,
+    buscar_producto_por_id,
+    buscar_venta_por_id
+)
 def test_buscar_usuario_recursivo_existente():
     lista_prueba = [
         ["admin", "1234", "admin"],
@@ -39,3 +41,12 @@ def test_buscar_producto_por_id_existente():
 def test_buscar_producto_por_id_inexistente():
     producto = buscar_producto_por_id(99999)
     assert producto is None
+
+def test_buscar_cliente_por_id_recursivo_existente():
+    lista_prueba = [
+        {"id": 1, "nombre": "Ana Gomez", "tipo_cliente": "frecuente"},
+        {"id": 2, "nombre": "Luis Perez", "tipo_cliente": "mayorista"},
+    ]
+    resultado = buscar_cliente_por_id_recursivo(lista_prueba, 1)
+    assert resultado is not None
+    assert resultado["nombre"] == "Ana Gomez"
