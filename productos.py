@@ -328,7 +328,7 @@ def menu_reportes():
 # MENÚ PRODUCTOS
 def menu_productos(rol):
     opcion = ""
-    while opcion != "7":
+    while opcion != "8":
         print("\n==================================")
         print("\033[1;34m       GESTIÓN DE PRODUCTOS       \033[0m")
         print("==================================")
