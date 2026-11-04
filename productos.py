@@ -65,15 +65,35 @@ def crear_producto():
 
     nombre = input("Nombre: ")
     categoria = validar_categoria()
-    precio = float(input("Precio: "))
-    while precio <= 0:
-        precio = float(input("\033[37;41mError, el precio no puede ser nulo o negativo, ingrese el precio: \033[0m"))
-    stock = int(input("Stock inicial: "))
-    while stock <= 0:
-        stock = int(input("\033[37;41mError, el stock no puede ser nulo o negativo, ingrese el stock: \033[0m"))
-    descuento = float(input("Descuento : "))
-    while descuento < 0:
-        descuento = float(input("\033[37;41mError, el descuento no puede ser negativo, ingrese el descuento: \033[0m"))
+    while True:
+        try:
+            precio = float(input("Precio: "))
+            if precio <= 0:
+                print("\033[37;41mError, el precio debe ser mayor que cero.\033[0m")
+                continue
+            break
+        except ValueError:
+            print("\033[31mError. Debe ingresar un precio numerico valido.\033[0m")
+
+    while True:
+        try:
+            stock = int(input("Stock inicial: "))
+            if stock <= 0:
+                print("\033[37;41mError, el stock debe ser mayor que cero.\033[0m")
+                continue
+            break
+        except ValueError:
+            print("\033[31mError. Debe ingresar un numero entero valido.\033[0m")
+
+    while True:
+        try:
+            descuento = float(input("Descuento : "))
+            if descuento < 0 or descuento > 1:
+                print("\033[37;41mError, el descuento debe estar entre 0 y 1.\033[0m")
+                continue
+            break
+        except ValueError:
+            print("\033[31mError. Debe ingresar un descuento numerico valido.\033[0m")
 
     nueva_fila = [nuevo_id, nombre, categoria, precio, stock, descuento]
     productos.append(nueva_fila)
@@ -215,7 +235,12 @@ def eliminar_producto(rol):
     rol(str): El rol del usuario autenticado, ya que solo un rol admin pueden hacerlo
     """
     listar_productos(productos)
-    id_buscar = int(input("\nIngresa el ID del producto a eliminar: "))
+    while True:
+        try:
+            id_buscar = int(input("\nIngresa el ID del producto a eliminar: "))
+            break
+        except ValueError:
+            print("\033[31mError. El ID debe ser un numero entero.\033[0m")
     encontrado = False
     i = 0
     while i < len(productos) and not encontrado:
