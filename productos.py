@@ -17,19 +17,24 @@ def cargar_productos_desde_archivo(ruta):
             for linea in arch:
                 linea = linea.strip()
                 if linea:
-                    campos = linea.split(",")
-                    id_prod = int(campos[0])
-                    nombre = campos[1]
-                    categoria = campos[2]
-                    precio = float(campos[3])
-                    stock = int(campos[4])
-                    descuento = float(campos[5])
-                    lista_productos.append([id_prod, nombre, categoria, precio, stock, descuento])
+                    try:
+                        campos = linea.split(",")
+                        id_prod = int(campos[0])
+                        nombre = campos[1]
+                        categoria = campos[2]
+                        precio = float(campos[3])
+                        stock = int(campos[4])
+                        descuento = float(campos[5])
+                        lista_productos.append([id_prod, nombre, categoria, precio, stock, descuento])
+                    except (ValueError, IndexError):
+                        print(f"Aviso: se omitió una línea inválida del archivo '{ruta}': {linea}")
     except FileNotFoundError:
         # Si el archivo aún no fue creado, inicializa una lista vacía
         print(f"Aviso: El archivo '{ruta}' no existe todavía. Se creara un nuevo archivo.")
     except OSError as err:
         print(f"Error al intentar leer el archivo '{ruta}': {err}")
+    except UnicodeDecodeError as err:
+        print(f"Error de codificación al leer '{ruta}': {err}")
     return lista_productos
 
 def guardar_productos_en_archivo(ruta, lista_productos):

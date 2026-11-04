@@ -16,12 +16,17 @@ def cargar_usuarios_desde_archivo(ruta):
             for linea in arch:
                 linea = linea.strip()
                 if linea:
-                    campos = linea.split(",")
-                    lista.append([campos[0], campos[1], campos[2]])
+                    try:
+                        campos = linea.split(",")
+                        lista.append([campos[0], campos[1], campos[2]])
+                    except IndexError:
+                        print(f"Aviso: se omitió una línea inválida del archivo '{ruta}': {linea}")
     except FileNotFoundError:
         print(f"Aviso: El archivo '{ruta}' no existe. Se creara un nuevo archivo.")
     except OSError as err:
         print(f"Error al intentar leer '{ruta}': {err}")
+    except UnicodeDecodeError as err:
+        print(f"Error de codificación al leer '{ruta}': {err}")
     return lista
 #nombre de usuario, contraseña, rol
 

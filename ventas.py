@@ -15,7 +15,11 @@ def cargar_ventas_desde_archivo(ruta):
     try:
         with open(ruta, "r", encoding="utf-8") as arch:
             lista_ventas = json.load(arch)
+            if not isinstance(lista_ventas, list):
+                raise TypeError("el contenido debe ser una lista de ventas")
             for v in lista_ventas:
+                if not isinstance(v, dict) or "fecha" not in v:
+                    raise TypeError("cada venta debe ser un diccionario con fecha")
                 v["fecha"] = tuple(v["fecha"])
             return lista_ventas
     except FileNotFoundError:
@@ -23,6 +27,12 @@ def cargar_ventas_desde_archivo(ruta):
         return []
     except OSError as err:
         print(f"Error al leer el archivo de ventas '{ruta}': {err}")
+        return []
+    except json.JSONDecodeError as err:
+        print(f"Error de formato JSON en '{ruta}': {err}")
+        return []
+    except TypeError as err:
+        print(f"Error de estructura en '{ruta}': {err}")
         return []
 
 def guardar_ventas_en_archivo(ruta, lista_ventas):
