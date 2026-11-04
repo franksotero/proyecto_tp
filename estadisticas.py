@@ -34,6 +34,7 @@ def menu_estadisticas(ventas,clientes,rol):
 
 
 def estadisticas_productos(ventas, rol):
+    """Muestra estadísticas de productos vendidos y su distribución por categoría."""
     if not ventas:
         print("\n No hay ventas registradas. Volviendo al menú de estadísticas...")
         return
@@ -83,6 +84,7 @@ def estadisticas_productos(ventas, rol):
 
 # --- ESTADÍSTICAS DE CLIENTES ---
 def estadisticas_clientes(ventas, rol):
+    """Muestra los clientes con mayor y menor gasto según el rol del usuario."""
     if not ventas:
         print("\nNo hay ventas registradas. Volviendo al menú de estadísticas...")
         return
@@ -101,6 +103,7 @@ def estadisticas_clientes(ventas, rol):
 
 # --- ESTADÍSTICAS DE VENTAS ---
 def estadisticas_ventas(ventas, rol):
+    """Muestra el promedio, cantidad, máximo y mínimo de las ventas registradas."""
     if not ventas:
         print("\nNo hay ventas registradas. Volviendo al menú de estadísticas...")
         return
@@ -117,6 +120,7 @@ def estadisticas_ventas(ventas, rol):
         print(f"- Menor venta registrada: Venta ID {menor['id']} (${menor['total']:.2f})")
 
 def reportes(ventas, clientes, rol):
+    """Muestra el reporte general combinando las estadísticas del sistema."""
     print("\n==================================")
     print("      REPORTE GENERAL COMPLETO    ")
     print("==================================")

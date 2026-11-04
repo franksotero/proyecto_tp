@@ -63,6 +63,7 @@ clientes = cargar_clientes_desde_archivo(NOMBRE_ARCHIVO_CLIENTES)
 
 
 def menu_clientes(rol):
+    """Muestra el menú de gestión de clientes según el rol autenticado."""
     opcion = ""
     while opcion != "5":
         print("=================================")
@@ -266,6 +267,7 @@ def actualizar_cliente(rol):
 
 # ELIMINAR
 def eliminar_cliente(rol):
+    """Elimina un cliente seleccionado por ID y guarda los cambios en el archivo JSON."""
     print("\n\033[1;33;44m---- ELIMINAR UN CLIENTE ----\033[0m")
     listar_clientes()
 

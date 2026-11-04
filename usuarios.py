@@ -70,6 +70,7 @@ def registrar_usuario():
     print("\033[32m¡Usuario registrado con éxito como Empleado!\033[0m")
 
 def iniciar_sesion():
+    """Autentica un usuario y devuelve su rol luego de validar hasta tres intentos."""
     print("\n\033[4;35m--- INICIO DE SESION ---\033[0m")
     intentos = 3
     while intentos > 0:
