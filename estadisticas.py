@@ -67,7 +67,7 @@ def estadisticas_productos(ventas, rol):
     print(f"\n- Conteo total de unidades vendidas en la tienda: {total_unidades_vendidas}")
 
     print("\n--- DESGLOSE POR CATEGORIA ---")
-    print(f"{"CATEGORÍA":<15} | {"UNIDADES":<10} | {"RECAUDACIÓN ($)":<16} | {"PROMEDIO/UNID ($)":<18} | {"% DEL TOTAL":<12}")
+    print(f"{'CATEGORÍA':<15} | {'UNIDADES':<10} | {'RECAUDACIÓN ($)':<16} | {'PROMEDIO/UNID ($)':<18} | {'% DEL TOTAL':<12}")
     print("-" * 80)
 
     for cat, unidades in conteo_categorias.items():
