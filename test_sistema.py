@@ -50,3 +50,8 @@ def test_buscar_cliente_por_id_recursivo_existente():
     resultado = buscar_cliente_por_id_recursivo(lista_prueba, 1)
     assert resultado is not None
     assert resultado["nombre"] == "Ana Gomez"
+
+def test_buscar_cliente_por_id_recursivo_inexistente():
+    lista_prueba = [{"id": 1, "nombre": "Ana Gomez"}]
+    resultado = buscar_cliente_por_id_recursivo(lista_prueba, 99)
+    assert resultado is None
