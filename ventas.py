@@ -236,11 +236,7 @@ def registrar_ventas():
         if producto is None:
             print("\033[31mProducto no encontrado. Intente nuevamente.\033[0m")
         else:
-            try:
-                cantidad = int(input(f"Ingrese cantidad de {producto[1]}: "))
-            except ValueError:
-                print("\033[31mCantidad inválida. Debe ser un número entero.\033[0m")
-                cantidad = 0
+            cantidad = int(input(f"Ingrese cantidad de {producto[1]}: "))
 
             if cantidad <= 0:
                 print("\033[31mCantidad inválida. Intente nuevamente.\033[0m")
@@ -381,21 +377,22 @@ def actualizar_ventas():
     producto[4] += cantidad_anterior
     print(f"Se han reintegrado {cantidad_anterior} unidades de {producto[1]} al stock.")
 
-    while True:
-        try:
-            nueva_cantidad = int(
-                input(
-                    f"Ingrese la nueva cantidad de {producto[1]} "
-                    f"(0 para eliminar el producto, stock disponible: {producto[4]}): "
-                )
+    nueva_cantidad = int(
+        input(
+            f"Ingrese la nueva cantidad de {producto[1]} "
+            f"(0 para eliminar el producto, stock disponible: {producto[4]}): "
+        )
+    )
+    while nueva_cantidad < 0 or nueva_cantidad > producto[4]:
+        print(
+            "\033[31mCantidad inválida. Debe ser 0 o mayor y no superar el stock disponible.\033[0m"
+        )
+        nueva_cantidad = int(
+            input(
+                f"Ingrese la nueva cantidad de {producto[1]} "
+                f"(0 para eliminar el producto, stock disponible: {producto[4]}): "
             )
-            if 0 <= nueva_cantidad <= producto[4]:
-                break
-            print(
-                "\033[31mCantidad inválida. Debe ser 0 o mayor y no superar el stock disponible.\033[0m"
-            )
-        except ValueError:
-            print("\033[31mCantidad inválida. Debe ser un número entero.\033[0m")
+        )
 
     if nueva_cantidad == 0:
         venta["items"].remove(item)

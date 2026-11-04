@@ -8,6 +8,7 @@ aplicando restricciones segun el rol del usuario ingresado.
 """
 NOMBRE_ARCHIVO_CLIENTES = "clientes.json"
 
+
 def procesar_clientes_recursivo(lista_raw, i=0):
     """
     Procesa recursivamente la lista de clientes
@@ -17,9 +18,10 @@ def procesar_clientes_recursivo(lista_raw, i=0):
     """
     if i == len(lista_raw):
         return []
-    
+
     cliente_actual = lista_raw[i]
     return [cliente_actual] + procesar_clientes_recursivo(lista_raw, i + 1)
+
 
 def cargar_clientes_desde_archivo(ruta):
     """
@@ -45,6 +47,7 @@ def cargar_clientes_desde_archivo(ruta):
         print(f"Error de estructura en '{ruta}': {err}")
         return []
 
+
 def guardar_clientes_en_archivo(ruta, lista_clientes):
     """
     Guarda la lista de clientes sobreescribiendo el archivo JSON
@@ -55,7 +58,9 @@ def guardar_clientes_en_archivo(ruta, lista_clientes):
     except OSError as err:
         print(f"Error al escribir en '{ruta}': {err}")
 
+
 clientes = cargar_clientes_desde_archivo(NOMBRE_ARCHIVO_CLIENTES)
+
 
 def menu_clientes(rol):
     opcion = ""
@@ -106,6 +111,7 @@ def listar_clientes():
         mostrar_clientes_recursivo(clientes)
     print("-" * 55)
 
+
 def mostrar_cliente(titulo, cliente):
     """
     Muestra los datos de un unico cliente puntual.
@@ -113,8 +119,11 @@ def mostrar_cliente(titulo, cliente):
     print(f"\n---- {titulo} ----")
     print(f"{'ID':<3} | {'NOMBRE Y APELLIDO':<18} | {'TIPO':<10} | {'TELÉFONO':<11}")
     print("-" * 55)
-    print(f"{cliente['id']:<3} | {cliente['nombre']:<18} | {cliente['tipo_cliente']:<10} | {cliente['telefono']:<11}")
-    
+    print(
+        f"{cliente['id']:<3} | {cliente['nombre']:<18} | {cliente['tipo_cliente']:<10} | {cliente['telefono']:<11}"
+    )
+
+
 def mostrar_clientes_recursivo(lista):
     """
     Imprime los clientes de forma recursiva utilizando slicing.
@@ -127,6 +136,7 @@ def mostrar_clientes_recursivo(lista):
             f"{cliente['id']:<3} | {cliente['nombre']:<18} | {cliente['tipo_cliente']:<10} | {cliente['telefono']:<11}"
         )
         mostrar_clientes_recursivo(lista[1:])
+
 
 def validar_nombre():
     """Solicita y valida, con una expresión regular, que se ingresen nombre
@@ -209,12 +219,7 @@ def actualizar_cliente(rol):
 
     print("\n\033[1;33;44m---- ACTUALIZAR DATOS DE UN CLIENTE ----\033[0m")
     listar_clientes()
-    while True:
-        try:
-            id_buscar = int(input("\nIngresa el ID del cliente que quieres modificar: "))
-            break
-        except ValueError:
-            print("\033[31mError. El ID debe ser un numero entero.\033[0m")
+    id_buscar = int(input("\nIngresa el ID del cliente que quieres modificar: "))
     encontrado = False
     for cliente in clientes:
         if cliente["id"] == id_buscar:
@@ -227,11 +232,8 @@ def actualizar_cliente(rol):
                 print("3. Actualizar número de teléfono")
                 print("4. Salir")
 
-                try:
-                    opcion = int(input("Elige una opción: "))
-                except ValueError:
-                    print("\033[31mError. Debe ingresar una opción numérica.\033[0m")
-                    continue
+                opcion = int(input("Elige una opción: "))
+
                 if opcion == 1:
                     nuevo_nombre = validar_nombre()
                     cliente["nombre"] = nuevo_nombre
@@ -246,10 +248,14 @@ def actualizar_cliente(rol):
                     if rol == "admin":
                         nuevo_telefono = validar_telefono()
                         cliente["telefono"] = nuevo_telefono
-                        print("\033[32mNúmero de teléfono actualizado correctamente.\033[0m")
+                        print(
+                            "\033[32mNúmero de teléfono actualizado correctamente.\033[0m"
+                        )
                         guardar_clientes_en_archivo(NOMBRE_ARCHIVO_CLIENTES, clientes)
                     else:
-                        print("\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden modificar el teléfono.\033[0m")
+                        print(
+                            "\n\033[37;41m[ACCESO DENEGADO] Solo los administradores pueden modificar el teléfono.\033[0m"
+                        )
                 elif opcion == 4:
                     print("Volviendo al gestión de clientes...")
                 else:
@@ -262,13 +268,11 @@ def actualizar_cliente(rol):
 def eliminar_cliente(rol):
     print("\n\033[1;33;44m---- ELIMINAR UN CLIENTE ----\033[0m")
     listar_clientes()
-    while True:
-        try:
-            id_buscar = int(input("\nIngresa el ID del cliente que quieres eliminar: "))
-            break
-        except ValueError:
-            print("\033[31mError. El ID debe ser un numero entero.\033[0m")
+
+    id_buscar = int(input("\nIngresa el ID del cliente que quieres eliminar: "))
+
     encontrado = False
+
     for cliente in clientes:
         if cliente["id"] == id_buscar:
             encontrado = True
