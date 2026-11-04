@@ -57,7 +57,7 @@
                 "nombre": "Aceite",
                 "categoria": "almacen",
                 "cantidad": 10,
-                "precio_unitario": 400.0,
+                "precio_unitario": 4000.0,
                 "descuento": 0.15,
                 "subtotal": 4000.0,
                 "precio_final": 3400.0
