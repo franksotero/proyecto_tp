@@ -78,15 +78,16 @@ def menu_ventas(rol):
             print("\033[31mOpción invalida\033[0m")
 
 
-def buscar_cliente_por_id(cliente_id):
-    """Busca un cliente por su identificador único.
-    cliente_id(int): ID del cliente a buscar.
-    Return:  Datos del cliente si se encuentra, none en caso contrario.
-    """
-    for cliente in clientes:
-        if cliente["id"] == cliente_id:
-            return cliente
-    return None
+def buscar_cliente_por_id_recursivo(lista_clientes, cliente_id, i=0):
+    """Busca un cliente por ID de forma recursiva usando índices."""
+    
+    if i == len(lista_clientes):
+        return None
+        
+    if lista_clientes[i]["id"] == cliente_id:
+        return lista_clientes[i]
+        
+    return buscar_cliente_por_id_recursivo(lista_clientes, cliente_id, i + 1)
 
 
 def buscar_producto_por_id(producto_id):
@@ -121,7 +122,7 @@ def consultar_compras_de_cliente():
     """
     try:
         id_buscar = int(input("\nIngrese el ID del cliente a consultar: "))
-        cliente = buscar_cliente_por_id(id_buscar)
+        cliente = buscar_cliente_por_id_recursivo(clientes, id_buscar)
     except ValueError:
         print("\033[31mID inválido. Debe ser un número entero.\033[0m")
         return
@@ -200,7 +201,7 @@ def registrar_ventas():
 
     try:
         cliente_id = int(input("\nIngrese ID del cliente: "))
-        cliente = buscar_cliente_por_id(cliente_id)
+        cliente = buscar_cliente_por_id_recursivo(clientes, cliente_id)
     except ValueError:
         print("\033[31mID inválido. Debe ser un número entero.\033[0m")
         return

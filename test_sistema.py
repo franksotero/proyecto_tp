@@ -32,7 +32,6 @@ def test_calcular_stock_total_recursivo_lista_vacia():
     assert total == 0
 
 def test_buscar_producto_por_id_existente():
-    # Busca en la lista real importada de productos
     producto = buscar_producto_por_id(1)
     assert producto is not None
     assert producto[0] == 1
