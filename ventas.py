@@ -90,17 +90,17 @@ def buscar_cliente_por_id_recursivo(lista_clientes, cliente_id, i=0):
     return buscar_cliente_por_id_recursivo(lista_clientes, cliente_id, i + 1)
 
 
-def buscar_producto_por_id(producto_id):
+def buscar_producto_por_id_recursivo(lista_productos, producto_id, i=0):
     """
-    Busca un producto en la matriz de productos utilizando su ID.
-    producto_id (int): ID del producto a buscar.
-    Return: la fila del producto si se encuentra, None en caso contrario.
+    busca un producto en la matriz de productos utilizando su ID de forma recursiva.
     """
-
-    for producto in productos:
-        if producto[0] == producto_id:
-            return producto
-    return None
+    if i == len(lista_productos):
+        return None
+        
+    if lista_productos[i][0] == producto_id:
+        return lista_productos[i]
+        
+    return buscar_producto_por_id_recursivo(lista_productos, producto_id, i + 1)
 
 
 def buscar_venta_por_id(venta_id):
@@ -222,7 +222,7 @@ def registrar_ventas():
         return
 
     while producto_id != 0:
-        producto = buscar_producto_por_id(producto_id)
+        producto = buscar_producto_por_id_recursivo(productos, producto_id)
         if producto is None:
             print("\033[31mProducto no encontrado. Intente nuevamente.\033[0m")
         else:
@@ -361,7 +361,7 @@ def actualizar_ventas():
 
     # obtenemos el primer (y único) item que coincide con el producto_id
     item = item_encontrado[0]
-    producto = buscar_producto_por_id(producto_id)
+    producto = buscar_producto_por_id_recursivo(productos, producto_id)
     cantidad_anterior = item["cantidad"]
     producto[4] += cantidad_anterior
     print(f"Se han reintegrado {cantidad_anterior} unidades de {producto[1]} al stock.")
@@ -451,8 +451,8 @@ def eliminar_ventas():
         return
 
     for item in venta["items"]:
-        producto = buscar_producto_por_id(item["producto_id"])
-        if producto is not None:
+       producto = buscar_producto_por_id_recursivo(productos, item["producto_id"])
+    if producto is not None:
             producto[4] += item["cantidad"]
 
     ventas.remove(venta)
