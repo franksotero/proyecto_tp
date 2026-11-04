@@ -201,7 +201,12 @@ def actualizar_cliente(rol):
 
     print("\n\033[1;33;44m---- ACTUALIZAR DATOS DE UN CLIENTE ----\033[0m")
     listar_clientes()
-    id_buscar = int(input("\nIngresa el ID del cliente que quieres modificar: "))
+    while True:
+        try:
+            id_buscar = int(input("\nIngresa el ID del cliente que quieres modificar: "))
+            break
+        except ValueError:
+            print("\033[31mError. El ID debe ser un numero entero.\033[0m")
     encontrado = False
     for cliente in clientes:
         if cliente["id"] == id_buscar:
@@ -214,7 +219,11 @@ def actualizar_cliente(rol):
                 print("3. Actualizar número de teléfono")
                 print("4. Salir")
 
-                opcion = int(input("Elige una opción: "))
+                try:
+                    opcion = int(input("Elige una opción: "))
+                except ValueError:
+                    print("\033[31mError. Debe ingresar una opción numérica.\033[0m")
+                    continue
                 if opcion == 1:
                     nuevo_nombre = validar_nombre()
                     cliente["nombre"] = nuevo_nombre
@@ -245,7 +254,12 @@ def actualizar_cliente(rol):
 def eliminar_cliente(rol):
     print("\n\033[1;33;44m---- ELIMINAR UN CLIENTE ----\033[0m")
     listar_clientes()
-    id_buscar = int(input("\nIngresa el ID del cliente que quieres eliminar: "))
+    while True:
+        try:
+            id_buscar = int(input("\nIngresa el ID del cliente que quieres eliminar: "))
+            break
+        except ValueError:
+            print("\033[31mError. El ID debe ser un numero entero.\033[0m")
     encontrado = False
     for cliente in clientes:
         if cliente["id"] == id_buscar:
