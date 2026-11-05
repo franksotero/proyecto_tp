@@ -170,8 +170,14 @@ def mostrar_ventas():
     )
     print("-" * 75)
     for venta in ventas:
+        if "cliente_nombre" in venta:
+            nombre_cliente = venta["cliente_nombre"]
+        else:
+            cliente = buscar_cliente_por_id_recursivo(clientes, venta["cliente_id"])
+            nombre_cliente = cliente["nombre"] if cliente else "Desconocido"
+
         print(
-            f"{venta['id']:<8} | {venta['cliente_id']:<10} | {venta['cliente_nombre']:<20} | {len(venta['items']):<5} | {sum(item['cantidad'] for item in venta['items']):<8} | ${venta['total']:<10}"
+            f"{venta['id']:<8} | {venta['cliente_id']:<10} | {nombre_cliente:<20} | {len(venta['items']):<5} | {sum(item['cantidad'] for item in venta['items']):<8} | ${venta['total']:<10}"
         )
 
     total_facturado = reduce(
