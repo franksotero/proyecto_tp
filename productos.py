@@ -86,6 +86,7 @@ def crear_producto():
     print(f"\n\033[32m¡Producto agregado con éxito! Se le asignó el ID: {nuevo_id}\033[0m")
 
 def obtener_categorias_unicas():
+    """Obtiene y muestra las categorías únicas registradas en los productos."""
     categorias = set(p[2].lower() for p in productos)
     print("Categorías disponibles en el sistema:", list(categorias))
     return categorias
@@ -298,6 +299,7 @@ def ordenar_precio_prod():
 
 
 def menu_reportes():
+    """Muestra el menú de reportes y ordenamiento del catálogo de productos."""
     opcion = ""
     while opcion != "5":
         print("\n==================================")
@@ -332,6 +334,7 @@ def menu_reportes():
 
 # MENÚ PRODUCTOS
 def menu_productos(rol):
+    """Muestra el menú de productos y controla las operaciones según el rol."""
     opcion = ""
     while opcion != "8":
         print("\n==================================")
