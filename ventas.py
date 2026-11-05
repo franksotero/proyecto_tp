@@ -297,7 +297,6 @@ def registrar_ventas():
     diccionario_venta = {
         "id": max((venta["id"] for venta in ventas), default=0) + 1,
         "cliente_id": cliente["id"],
-        "cliente_nombre": cliente["nombre"],
         "fecha": (hoy.day, hoy.month, hoy.year),
         "items": una_venta,
         "total": sum(item["precio_final"] for item in una_venta),
@@ -448,11 +447,16 @@ def eliminar_ventas():
     print(f"{'ID VENTA':<8} | {'NOMBRE Y APELLIDO':<17} | {'ITEMS':<5} | {'TOTAL':<10}")
     print("-" * 70)
     for venta in ventas:
+        if "cliente_nombre" in venta:
+            nombre_cliente = venta["cliente_nombre"]
+        else:
+            cliente = buscar_cliente_por_id_recursivo(clientes, venta["cliente_id"])
+            nombre_cliente = cliente["nombre"] if cliente else "Desconocido"
+
         print(
-            f"{venta['id']:<8} | {venta['cliente_nombre']:<17} | "
+            f"{venta['id']:<8} | {nombre_cliente:<17} | "
             f"{len(venta['items']):<5} | ${venta['total']:<10}"
         )
-
     try:
         venta_id = int(input("\nIngrese el ID de la venta a eliminar (0 para salir): "))
     except ValueError:
