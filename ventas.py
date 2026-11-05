@@ -15,12 +15,11 @@ def cargar_ventas_desde_archivo(ruta):
     try:
         with open(ruta, "r", encoding="utf-8") as arch:
             lista_ventas = json.load(arch)
-            if not isinstance(lista_ventas, list):
-                raise TypeError("el contenido debe ser una lista de ventas")
+            if not type(lista_ventas) is list:
+                raise Exception("el contenido debe ser una lista de ventas")
             for v in lista_ventas:
-                if not isinstance(v, dict) or "fecha" not in v:
-                    raise TypeError("cada venta debe ser un diccionario con fecha")
-                v["fecha"] = tuple(v["fecha"])
+                if not type(v) is dict or "fecha" not in v:
+                    raise Exception("cada venta debe ser un diccionario con fecha")
             return lista_ventas
     except FileNotFoundError:
         print(f"Aviso: El archivo '{ruta}' no existe. Se creará al guardar la primera venta.")
@@ -31,7 +30,7 @@ def cargar_ventas_desde_archivo(ruta):
     except json.JSONDecodeError as err:
         print(f"Error de formato JSON en '{ruta}': {err}")
         return []
-    except TypeError as err:
+    except Exception as err:
         print(f"Error de estructura en '{ruta}': {err}")
         return []
 
@@ -361,7 +360,6 @@ def actualizar_ventas():
     except ValueError:
         print("\033[31mID inválido. Debe ser un número entero.\033[0m")
         return
-    # buscamos el item que coincida con el ID del producto
     item_encontrado = [
         item for item in venta["items"] if item["producto_id"] == producto_id
     ]
@@ -370,29 +368,35 @@ def actualizar_ventas():
         print("\033[31mID de producto no encontrado.\033[0m")
         return
 
-    # obtenemos el primer (y único) item que coincide con el producto_id
     item = item_encontrado[0]
     producto = buscar_producto_por_id_recursivo(productos, producto_id)
     cantidad_anterior = item["cantidad"]
     producto[4] += cantidad_anterior
     print(f"Se han reintegrado {cantidad_anterior} unidades de {producto[1]} al stock.")
-
-    nueva_cantidad = int(
-        input(
-            f"Ingrese la nueva cantidad de {producto[1]} "
-            f"(0 para eliminar el producto, stock disponible: {producto[4]}): "
-        )
-    )
-    while nueva_cantidad < 0 or nueva_cantidad > producto[4]:
-        print(
-            "\033[31mCantidad inválida. Debe ser 0 o mayor y no superar el stock disponible.\033[0m"
-        )
+    try:
         nueva_cantidad = int(
             input(
                 f"Ingrese la nueva cantidad de {producto[1]} "
                 f"(0 para eliminar el producto, stock disponible: {producto[4]}): "
             )
         )
+    except ValueError:
+        print("\033[31mDebe ingresar un numero entero valido.\033[0m")
+        producto[4] -= cantidad_anterior
+        return
+    while nueva_cantidad < 0 or nueva_cantidad > producto[4]:
+        print(
+            "\033[31mCantidad inválida. Debe ser 0 o mayor y no superar el stock disponible.\033[0m"
+        )
+        try:
+            nueva_cantidad = int(
+                input(
+                    f"Ingrese la nueva cantidad de {producto[1]} "
+                    f"(0 para eliminar el producto, stock disponible: {producto[4]}): "
+                )
+            )
+        except ValueError:
+            print("\033[31mDebe ingresar un número entero válido.\033[0m")
 
     if nueva_cantidad == 0:
         venta["items"].remove(item)
@@ -404,8 +408,9 @@ def actualizar_ventas():
         else:
             print("\033[32mProducto eliminado de la venta.\033[0m")
             print(f"Nuevo total de la venta: ${venta['total']}")
+        guardar_ventas_en_archivo(NOMBRE_ARCHIVO_VENTAS, ventas)
+        guardar_productos_en_archivo(NOMBRE_ARCHIVO, productos)
         return
-
     producto[4] -= nueva_cantidad
     subtotal = producto[3] * nueva_cantidad
     precio_final = subtotal - (subtotal * producto[5])
@@ -462,8 +467,8 @@ def eliminar_ventas():
         return
 
     for item in venta["items"]:
-       producto = buscar_producto_por_id_recursivo(productos, item["producto_id"])
-    if producto is not None:
+        producto = buscar_producto_por_id_recursivo(productos, item["producto_id"])
+        if producto is not None:
             producto[4] += item["cantidad"]
 
     ventas.remove(venta)

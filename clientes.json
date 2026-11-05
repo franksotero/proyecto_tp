@@ -34,5 +34,11 @@
         "nombre": "Ezequiel Fernandez",
         "tipo_cliente": "mayorista",
         "telefono": "1178359356"
+    },
+    {
+        "id": 7,
+        "nombre": "Maria Carmen",
+        "tipo_cliente": "frecuente",
+        "telefono": "1145682943"
     }
 ]

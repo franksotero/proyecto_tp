@@ -26,13 +26,13 @@ def procesar_clientes_recursivo(lista_raw, i=0):
 def cargar_clientes_desde_archivo(ruta):
     """
     Lee el archivo JSON de clientes con manejo de excepciones try-except y la sentencia with.
-    Utiliza una funcion recursiva.
+    Utiliza una función recursiva.
     """
     try:
         with open(ruta, "r", encoding="utf-8") as arch:
             datos_raw = json.load(arch)
-            if not isinstance(datos_raw, list):
-                raise TypeError("el contenido debe ser una lista de clientes")
+            if not type(datos_raw) is list:
+                raise Exception("El contenido debe ser una lista de clientes")  
             return procesar_clientes_recursivo(datos_raw)
     except FileNotFoundError:
         print(f"Aviso: El archivo '{ruta}' no existe. Se creará al guardar datos.")
@@ -43,10 +43,9 @@ def cargar_clientes_desde_archivo(ruta):
     except json.JSONDecodeError as err:
         print(f"Error de formato JSON en '{ruta}': {err}")
         return []
-    except TypeError as err:
+    except Exception as err:
         print(f"Error de estructura en '{ruta}': {err}")
         return []
-
 
 def guardar_clientes_en_archivo(ruta, lista_clientes):
     """

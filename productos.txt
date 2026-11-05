@@ -5,7 +5,7 @@
 5,Shampoo,higiene,3000.0,7,0.15
 6,Arroz,almacen,1500.0,8,0.0
 7,Galletitas,almacen,1500.0,5,0.05
-8,Papas fritas,snacks,2800.0,22,0.1
+8,Papas fritas,snacks,2700.0,22,0.1
 9,Jabon,higiene,1200.0,47,0.0
 10,Aceite,almacen,4000.0,18,0.15
 11,Yerba mate,almacen,2500.0,30,0.15
