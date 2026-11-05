@@ -93,16 +93,29 @@ def obtener_categorias_unicas():
 
 
 def validar_categoria():
-    """
-    Solicita y valida que la categoría ingresada exista en el sistema.
-    """
-    categorias_existentes = set(p[2].lower().strip() for p in productos)
-    print("\nCategorías disponibles:", ", ".join(categorias_existentes))
-    categoria = input("Ingrese la categoría: ").lower().strip()
-    while categoria not in categorias_existentes:
-        print("\033[31mError. La categoría no existe. Ingrese una de las categorías listadas.\033[0m")
-        categoria = input("Ingrese una categoría válida: ").lower().strip()
+  """Solicita y valida que la categoría ingresada exista en el sistema."""
+  # Si la lista está vacía, permite crear la primera categoría libremente
+  if not productos:
+    categoria = input("Ingrese la categoría para el primer producto: ").lower().strip()
+    
+    while categoria == "":
+      print("\033[31mError. La categoría no puede estar vacía.\033[0m")
+      categoria = input("Ingrese una categoría válida: ").lower().strip()
+      
     return categoria
+
+  categorias_existentes = set(p[2].lower().strip() for p in productos)
+  print("\nCategorías disponibles:", ", ".join(categorias_existentes))
+  categoria = input("Ingrese la categoría: ").lower().strip()
+  
+  while categoria not in categorias_existentes:
+    print(
+        "\033[31mError. La categoría no existe. Ingrese una de las categorías"
+        " listadas.\033[0m"
+    )
+    categoria = input("Ingrese una categoría válida: ").lower().strip()
+    
+  return categoria
 
 
 # READ PRODUCTOS
