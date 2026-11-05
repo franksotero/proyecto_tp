@@ -40,5 +40,11 @@
         "nombre": "Maria Carmen",
         "tipo_cliente": "frecuente",
         "telefono": "1145682943"
+    },
+    {
+        "id": 8,
+        "nombre": "Cardona Edwin",
+        "tipo_cliente": "mayorista",
+        "telefono": "1234565432"
     }
 ]

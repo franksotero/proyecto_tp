@@ -402,6 +402,7 @@ def actualizar_ventas():
             )
         except ValueError:
             print("\033[31mDebe ingresar un número entero válido.\033[0m")
+            nueva_cantidad = -1
 
     if nueva_cantidad == 0:
         venta["items"].remove(item)

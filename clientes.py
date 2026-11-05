@@ -219,8 +219,16 @@ def actualizar_cliente(rol):
 
     print("\n\033[1;33;44m---- ACTUALIZAR DATOS DE UN CLIENTE ----\033[0m")
     listar_clientes()
-    id_buscar = int(input("\nIngresa el ID del cliente que quieres modificar: "))
-    encontrado = False
+    id_buscar = -1
+
+    while id_buscar < 0:
+      try:
+        id_buscar = int(
+            input("\nIngresa el ID del cliente que quieres modificar: ")
+        )
+      except ValueError:
+        print("\033[31mError. Debe ingresar un número entero válido.\033[0m")
+        id_buscar = -1
     for cliente in clientes:
         if cliente["id"] == id_buscar:
             encontrado = True
@@ -232,7 +240,14 @@ def actualizar_cliente(rol):
                 print("3. Actualizar número de teléfono")
                 print("4. Salir")
 
-                opcion = int(input("Elige una opción: "))
+                try:
+                  opcion = int(input("Elige una opción: "))
+                except ValueError:
+                  print(
+                      "\033[31mError. Debe ingresar un número entero"
+                      " válido.\033[0m"
+                  )
+                  opcion = 0  # Lo dejamos en 0 para que no rompa y repita el menú
 
                 if opcion == 1:
                     nuevo_nombre = validar_nombre()
